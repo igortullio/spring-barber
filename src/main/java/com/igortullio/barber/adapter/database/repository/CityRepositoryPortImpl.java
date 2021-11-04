@@ -46,7 +46,7 @@ public class CityRepositoryPortImpl implements RepositoryPort<City> {
             State state = stateRepositoryPort.find(city.getState().getId());
             cityEntity.setState(modelMapper.map(state, StateEntity.class));
 
-            existsCityWithNameInState(city.getName(), state);
+            existsCityWithNameInState(city, state);
 
             cityEntity = cityJpaRepository.save(cityEntity);
             return modelMapper.map(cityEntity, City.class);
@@ -64,7 +64,7 @@ public class CityRepositoryPortImpl implements RepositoryPort<City> {
             State state = stateRepositoryPort.find(city.getState().getId());
             cityInDB.setState(state);
 
-            existsCityWithNameInState(cityInDB.getName(), state);
+            existsCityWithNameInState(cityInDB, state);
 
             CityEntity cityEntity = modelMapper.map(cityInDB, CityEntity.class);
             cityEntity = cityJpaRepository.save(cityEntity);
@@ -87,16 +87,16 @@ public class CityRepositoryPortImpl implements RepositoryPort<City> {
         }
     }
 
-    protected City findByNameAndState(String name, StateEntity state) {
+    private City findByNameAndState(String name, StateEntity state) {
         CityEntity cityEntity = cityJpaRepository.findByNameAndState(name, state)
                 .orElseThrow(() -> new CityNotFoundException(name));
         return modelMapper.map(cityEntity, City.class);
     }
 
-    private void existsCityWithNameInState(String name, State state) {
+    private void existsCityWithNameInState(City city, State state) {
         try {
             StateEntity stateEntity = modelMapper.map(state, StateEntity.class);
-            City city = findByNameAndState(name, stateEntity);
+            city = findByNameAndState(city.getName(), stateEntity);
             throw new BarberException("City (" + city.getName() + ") already exists in the state (" + state.getName() + ")");
         } catch (CityNotFoundException ignored) { /* City not exists */ }
     }

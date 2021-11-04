@@ -68,7 +68,6 @@ public class BarbershopRepositoryPortImpl implements RepositoryPort<Barbershop> 
             Barbershop barbershopInDB = find(id);
             barbershopInDB.setName(barbershop.getName());
             barbershopInDB.setActive(barbershop.getActive());
-            barbershopInDB.setOpen(barbershop.getOpen());
 
             Address address = addressRepositoryPort.find(barbershop.getAddress().getId());
             barbershopInDB.setAddress(address);

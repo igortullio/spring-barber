@@ -25,28 +25,28 @@ public class AddressController extends AbstractController<AddressDtoInput, Addre
         this.addressService = addressService;
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public AddressDtoOutput get(@PathVariable Long id) {
         Address address = addressService.find(id);
         return modelMapper.map(address, AddressDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public AddressDtoOutput post(AddressDtoInput addressDto) {
         Address address = modelMapper.map(addressDto, Address.class);
         return modelMapper.map(addressService.save(address), AddressDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public AddressDtoOutput put(@PathVariable Long id, AddressDtoInput addressDto) {
         Address address = modelMapper.map(addressDto, Address.class);
         return modelMapper.map(addressService.update(id, address), AddressDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public void delete(@PathVariable Long id) {
         addressService.delete(id);

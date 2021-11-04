@@ -24,28 +24,28 @@ public class BarbershopController extends AbstractController<BarbershopDtoInput,
         this.barbershopService = barbershopService;
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public BarbershopDtoOutput get(Long id) {
         Barbershop barbershop = barbershopService.find(id);
         return modelMapper.map(barbershop, BarbershopDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public BarbershopDtoOutput post(BarbershopDtoInput barbershopDto) {
         Barbershop barbershop = modelMapper.map(barbershopDto, Barbershop.class);
         return modelMapper.map(barbershopService.save(barbershop), BarbershopDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public BarbershopDtoOutput put(Long id, BarbershopDtoInput barbershopDto) {
         Barbershop barbershop = modelMapper.map(barbershopDto, Barbershop.class);
         return modelMapper.map(barbershopService.update(id, barbershop), BarbershopDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public void delete(Long id) {
         barbershopService.delete(id);

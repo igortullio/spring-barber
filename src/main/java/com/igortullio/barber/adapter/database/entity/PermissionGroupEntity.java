@@ -8,10 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -26,10 +23,6 @@ public class PermissionGroupEntity extends AbstractEntity implements GrantedAuth
 
     @Column(nullable = false, unique = true)
     private String name;
-
-    @OneToMany
-    @ToString.Exclude
-    private Set<PermissionEntity> permissionSet;
 
     @Override
     public String getAuthority() {

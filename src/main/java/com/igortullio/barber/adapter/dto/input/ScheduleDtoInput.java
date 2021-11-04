@@ -5,18 +5,18 @@ import lombok.Setter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
 public class ScheduleDtoInput extends AbstractDtoInput {
 
     @NotNull
-    private OffsetDateTime date;
+    private LocalTime time;
 
     @Valid
     @NotNull
-    private BarbershopScheduleDtoInput barbershop;
+    private OperationScheduleDtoInput operation;
 
     @Valid
     @NotNull
@@ -24,7 +24,7 @@ public class ScheduleDtoInput extends AbstractDtoInput {
 
     @Getter
     @Setter
-    private static class BarbershopScheduleDtoInput extends AbstractDtoInput {
+    private static class OperationScheduleDtoInput extends AbstractDtoInput {
 
     }
 

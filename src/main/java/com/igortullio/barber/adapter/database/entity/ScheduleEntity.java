@@ -1,6 +1,7 @@
 package com.igortullio.barber.adapter.database.entity;
 
-import com.igortullio.barber.adapter.database.entity.enumeration.ScheduleStatusEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.igortullio.barber.core.domain.enumeration.ScheduleStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.OffsetDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -24,20 +25,21 @@ import java.time.OffsetDateTime;
 @Table(name = "schedule")
 public class ScheduleEntity extends AbstractEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false)
+    private LocalTime time;
+
+    @Enumerated(EnumType.STRING)
+    private ScheduleStatus status;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "operation_id")
+    @ToString.Exclude
+    private OperationEntity operation;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private UserEntity user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barbershop_id")
-    @ToString.Exclude
-    private BarbershopEntity barbershop;
-
-    @Column(nullable = false)
-    private OffsetDateTime date;
-
-    @Enumerated(EnumType.STRING)
-    private ScheduleStatusEntity status;
 
 }

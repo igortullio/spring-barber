@@ -17,9 +17,6 @@ public class BarbershopDtoInput extends AbstractDtoInput {
     @NotNull
     private Boolean active;
 
-    @NotNull
-    private Boolean open;
-
     @Valid
     @NotNull
     private AddressBarbershopDtoInput address;

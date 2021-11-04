@@ -6,6 +6,8 @@ import com.igortullio.barber.adapter.database.repository.BarbershopJpaRepository
 import com.igortullio.barber.adapter.database.repository.BarbershopRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.CityJpaRepository;
 import com.igortullio.barber.adapter.database.repository.CityRepositoryPortImpl;
+import com.igortullio.barber.adapter.database.repository.OperationJpaRepository;
+import com.igortullio.barber.adapter.database.repository.OperationRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.PermissionGroupJpaRepository;
 import com.igortullio.barber.adapter.database.repository.PermissionGroupRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.PermissionJpaRepository;
@@ -19,6 +21,7 @@ import com.igortullio.barber.adapter.database.repository.UserRepositoryPortImpl;
 import com.igortullio.barber.core.service.AddressService;
 import com.igortullio.barber.core.service.BarbershopService;
 import com.igortullio.barber.core.service.CityService;
+import com.igortullio.barber.core.service.OperationService;
 import com.igortullio.barber.core.service.PermissionGroupService;
 import com.igortullio.barber.core.service.PermissionService;
 import com.igortullio.barber.core.service.ScheduleService;
@@ -31,6 +34,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class ServiceConfig {
+
+    @Bean
+    public OperationService operationService(OperationJpaRepository operationJpaRepository,
+                                             BarbershopRepositoryPortImpl barbershopRepositoryPort,
+                                             ModelMapper modelMapper) {
+        return new OperationService(new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, modelMapper));
+    }
 
     @Bean
     public PermissionService permissionService(PermissionJpaRepository permissionJpaRepository,
@@ -48,9 +58,14 @@ public class ServiceConfig {
     @Bean
     public ScheduleService scheduleService(ScheduleJpaRepository scheduleJpaRepository,
                                            UserRepositoryPortImpl userRepositoryPort,
+                                           OperationRepositoryPortImpl operationRepositoryPort,
+                                           OperationJpaRepository operationJpaRepository,
                                            BarbershopRepositoryPortImpl barbershopRepositoryPort,
                                            ModelMapper modelMapper) {
-        return new ScheduleService(new ScheduleRepositoryPortImpl(scheduleJpaRepository, userRepositoryPort, barbershopRepositoryPort, modelMapper));
+        return new ScheduleService(
+                new ScheduleRepositoryPortImpl(scheduleJpaRepository, userRepositoryPort, operationRepositoryPort, modelMapper),
+                new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, modelMapper)
+        );
     }
 
     @Bean

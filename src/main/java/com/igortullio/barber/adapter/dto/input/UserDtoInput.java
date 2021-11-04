@@ -26,6 +26,7 @@ public class UserDtoInput extends AbstractDtoInput {
     @NotBlank
     private String phone;
 
+    @NotNull
     @Valid
     private Set<PermissionGroupUserDtoInput> permissionGroupSet;
 

@@ -23,7 +23,7 @@ public class CityEntity extends AbstractEntity {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "state_id")
     @ToString.Exclude
     private StateEntity state;

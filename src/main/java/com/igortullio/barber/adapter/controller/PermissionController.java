@@ -7,13 +7,10 @@ import com.igortullio.barber.core.domain.Permission;
 import com.igortullio.barber.core.service.PermissionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/permissions")
@@ -27,30 +24,30 @@ public class PermissionController extends AbstractController<PermissionDtoInput,
         this.permissionService = permissionService;
     }
 
-    @RolesAllowed({ PermissionGroupEntity.USER, PermissionGroupEntity.ADMIN })
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
-    public PermissionDtoOutput get(@PathVariable Long id) {
+    public PermissionDtoOutput get(Long id) {
         Permission permission = permissionService.find(id);
         return modelMapper.map(permission, PermissionDtoOutput.class);
     }
 
     @RolesAllowed(PermissionGroupEntity.ADMIN)
     @Override
-    public PermissionDtoOutput post(@RequestBody @Valid PermissionDtoInput permissionDto) {
+    public PermissionDtoOutput post(PermissionDtoInput permissionDto) {
         Permission permission = modelMapper.map(permissionDto, Permission.class);
         return modelMapper.map(permissionService.save(permission), PermissionDtoOutput.class);
     }
 
     @RolesAllowed(PermissionGroupEntity.ADMIN)
     @Override
-    public PermissionDtoOutput put(@PathVariable Long id, @RequestBody @Valid PermissionDtoInput permissionDto) {
+    public PermissionDtoOutput put(Long id, PermissionDtoInput permissionDto) {
         Permission permission = modelMapper.map(permissionDto, Permission.class);
         return modelMapper.map(permissionService.update(id, permission), PermissionDtoOutput.class);
     }
 
     @RolesAllowed(PermissionGroupEntity.ADMIN)
     @Override
-    public void delete(@PathVariable Long id) {
+    public void delete(Long id) {
         permissionService.delete(id);
     }
 

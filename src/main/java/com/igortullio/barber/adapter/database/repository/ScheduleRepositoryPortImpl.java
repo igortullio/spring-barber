@@ -1,12 +1,12 @@
 package com.igortullio.barber.adapter.database.repository;
 
-import com.igortullio.barber.adapter.database.entity.BarbershopEntity;
+import com.igortullio.barber.adapter.database.entity.OperationEntity;
 import com.igortullio.barber.adapter.database.entity.ScheduleEntity;
 import com.igortullio.barber.adapter.database.entity.UserEntity;
-import com.igortullio.barber.adapter.database.entity.enumeration.ScheduleStatusEntity;
-import com.igortullio.barber.core.domain.Barbershop;
+import com.igortullio.barber.core.domain.Operation;
 import com.igortullio.barber.core.domain.Schedule;
 import com.igortullio.barber.core.domain.User;
+import com.igortullio.barber.core.domain.enumeration.ScheduleStatus;
 import com.igortullio.barber.core.exception.BarberException;
 import com.igortullio.barber.core.exception.in_use.ScheduleInUseException;
 import com.igortullio.barber.core.exception.not_found.AbstractNotFoundException;
@@ -24,16 +24,16 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule> {
 
     private final ScheduleJpaRepository scheduleJpaRepository;
     private final UserRepositoryPortImpl userRepositoryPort;
-    private final BarbershopRepositoryPortImpl barbershopRepositoryPort;
+    private final OperationRepositoryPortImpl operationRepositoryPort;
     private final ModelMapper modelMapper;
 
     public ScheduleRepositoryPortImpl(ScheduleJpaRepository scheduleJpaRepository,
                                       UserRepositoryPortImpl userRepositoryPort,
-                                      BarbershopRepositoryPortImpl barbershopRepositoryPort,
+                                      OperationRepositoryPortImpl operationRepositoryPort,
                                       ModelMapper modelMapper) {
         this.scheduleJpaRepository = scheduleJpaRepository;
         this.userRepositoryPort = userRepositoryPort;
-        this.barbershopRepositoryPort = barbershopRepositoryPort;
+        this.operationRepositoryPort = operationRepositoryPort;
         this.modelMapper = modelMapper;
     }
 
@@ -53,10 +53,10 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule> {
             User user = userRepositoryPort.find(scheduleEntity.getUser().getId());
             scheduleEntity.setUser(modelMapper.map(user, UserEntity.class));
 
-            Barbershop barbershop = barbershopRepositoryPort.find(scheduleEntity.getBarbershop().getId());
-            scheduleEntity.setBarbershop(modelMapper.map(barbershop, BarbershopEntity.class));
+            Operation operation = operationRepositoryPort.find(scheduleEntity.getOperation().getId());
+            scheduleEntity.setOperation(modelMapper.map(operation, OperationEntity.class));
 
-            scheduleEntity.setStatus(ScheduleStatusEntity.CREATED);
+            scheduleEntity.setStatus(ScheduleStatus.CREATED);
             scheduleEntity = scheduleJpaRepository.save(scheduleEntity);
             return modelMapper.map(scheduleEntity, Schedule.class);
         } catch (AbstractNotFoundException exception) {
@@ -68,13 +68,13 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule> {
     public Schedule update(Long id, Schedule schedule) {
         try {
             Schedule scheduleInDB = find(id);
-            scheduleInDB.setDate(schedule.getDate());
+            scheduleInDB.setTime(schedule.getTime());
 
             User user = userRepositoryPort.find(schedule.getUser().getId());
             scheduleInDB.setUser(user);
 
-            Barbershop barbershop = barbershopRepositoryPort.find(schedule.getBarbershop().getId());
-            scheduleInDB.setBarbershop(barbershop);
+            Operation operation = operationRepositoryPort.find(schedule.getOperation().getId());
+            scheduleInDB.setOperation(operation);
 
             ScheduleEntity scheduleEntity = modelMapper.map(scheduleInDB, ScheduleEntity.class);
             scheduleEntity = scheduleJpaRepository.save(scheduleEntity);

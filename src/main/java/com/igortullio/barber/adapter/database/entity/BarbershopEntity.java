@@ -26,9 +26,6 @@ public class BarbershopEntity extends AbstractEntity {
     @Column(nullable = false)
     private Boolean active;
 
-    @Column(nullable = false)
-    private Boolean open;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     @ToString.Exclude

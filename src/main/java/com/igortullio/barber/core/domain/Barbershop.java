@@ -4,7 +4,6 @@ public class Barbershop extends AbstractDomain {
 
     private String name;
     private Boolean active;
-    private Boolean open;
     private Address address;
     private User owner;
 
@@ -22,14 +21,6 @@ public class Barbershop extends AbstractDomain {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Boolean getOpen() {
-        return open;
-    }
-
-    public void setOpen(Boolean open) {
-        this.open = open;
     }
 
     public Address getAddress() {

@@ -2,10 +2,8 @@ package com.igortullio.barber.adapter.database.repository;
 
 import com.igortullio.barber.adapter.database.entity.PermissionEntity;
 import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
-import com.igortullio.barber.adapter.database.entity.StateEntity;
 import com.igortullio.barber.core.domain.Permission;
 import com.igortullio.barber.core.domain.PermissionGroup;
-import com.igortullio.barber.core.domain.State;
 import com.igortullio.barber.core.exception.BarberException;
 import com.igortullio.barber.core.exception.in_use.PermissionInUseException;
 import com.igortullio.barber.core.exception.not_found.AbstractNotFoundException;

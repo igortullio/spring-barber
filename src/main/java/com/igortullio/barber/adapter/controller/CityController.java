@@ -7,13 +7,10 @@ import com.igortullio.barber.core.domain.City;
 import com.igortullio.barber.core.service.CityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/cities")
@@ -27,30 +24,30 @@ public class CityController extends AbstractController<CityDtoInput, CityDtoOutp
         this.cityService = cityService;
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
-    public CityDtoOutput get(@PathVariable Long id) {
+    public CityDtoOutput get(Long id) {
         City city = cityService.find(id);
         return modelMapper.map(city, CityDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
-    public CityDtoOutput post(@RequestBody @Valid CityDtoInput cityDto) {
+    public CityDtoOutput post(CityDtoInput cityDto) {
         City city = modelMapper.map(cityDto, City.class);
         return modelMapper.map(cityService.save(city), CityDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.USER)
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
-    public CityDtoOutput put(@PathVariable Long id, @RequestBody @Valid CityDtoInput cityDto) {
+    public CityDtoOutput put(Long id, CityDtoInput cityDto) {
         City city = modelMapper.map(cityDto, City.class);
         return modelMapper.map(cityService.update(id, city), CityDtoOutput.class);
     }
 
     @RolesAllowed(PermissionGroupEntity.ADMIN)
     @Override
-    public void delete(@PathVariable Long id) {
+    public void delete(Long id) {
         cityService.delete(id);
     }
 

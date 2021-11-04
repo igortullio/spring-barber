@@ -26,7 +26,7 @@ public class PermissionEntity extends AbstractEntity {
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "permission_group_id", nullable = false)
     @ToString.Exclude
     private PermissionGroupEntity permissionGroup;
