@@ -6,7 +6,7 @@ import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.port.RepositoryFindAllPort;
 import com.igortullio.barber.core.port.RepositoryPort;
 
-public class StateService implements InterfaceService<State> {
+public class StateService implements InterfaceService<State>, InterfaceFindAllService<State> {
 
     private final RepositoryPort<State> stateRepository;
     private final RepositoryFindAllPort<State> stateRepositoryFindAll;
@@ -17,8 +17,9 @@ public class StateService implements InterfaceService<State> {
         this.stateRepositoryFindAll = stateRepositoryFindAll;
     }
 
-    public PageBarber<State> findAll(PageableBarber pageableBarber) {
-        return stateRepositoryFindAll.findAll(pageableBarber);
+    @Override
+    public PageBarber<State> findAll(Object o, PageableBarber pageableBarber) {
+        return stateRepositoryFindAll.findAll(o, pageableBarber);
     }
 
     @Override

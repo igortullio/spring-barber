@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
@@ -21,9 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/states")
-public class StateController
-        extends AbstractController<StateDtoInput, StateDtoOutput>
-        implements InterfaceControllerGetAll<StateDtoOutput> {
+public class StateController extends AbstractController<StateDtoInput, StateDtoOutput> {
 
     private final StateService stateService;
 
@@ -34,11 +35,12 @@ public class StateController
     }
 
     @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
-    @Override
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Page<StateDtoOutput> getAll(Pageable pageable) {
         PageableBarber pageableBarber = PageablePortMapper.of(pageable);
 
-        PageBarber<State> statePageBarber = stateService.findAll(pageableBarber);
+        PageBarber<State> statePageBarber = stateService.findAll(null, pageableBarber);
         List<StateDtoOutput> stateDtoOutputs = statePageBarber.getList()
                 .stream()
                 .map(state -> modelMapper.map(state, StateDtoOutput.class))

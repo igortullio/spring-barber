@@ -6,6 +6,6 @@ import com.igortullio.barber.core.pageable.PageableBarber;
 
 public interface RepositoryFindAllPort<T extends AbstractDomain> {
 
-    PageBarber<T> findAll(PageableBarber pageableBarber);
+    PageBarber<T> findAll(Object specification, PageableBarber pageableBarber);
 
 }

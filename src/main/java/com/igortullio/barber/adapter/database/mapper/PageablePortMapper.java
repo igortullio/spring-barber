@@ -11,7 +11,7 @@ public class PageablePortMapper {
     public static PageableBarber of(Page<?> page) {
         PageableBarber pageableBarber = of(page.getPageable());
         pageableBarber.setTotalPages(page.getTotalPages());
-        pageableBarber.setTotalElements(pageableBarber.getTotalElements());
+        pageableBarber.setTotalElements(page.getTotalElements());
 
         return pageableBarber;
     }

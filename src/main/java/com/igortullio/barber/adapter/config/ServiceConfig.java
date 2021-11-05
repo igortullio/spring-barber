@@ -5,6 +5,7 @@ import com.igortullio.barber.adapter.database.repository.AddressRepositoryPortIm
 import com.igortullio.barber.adapter.database.repository.BarbershopJpaRepository;
 import com.igortullio.barber.adapter.database.repository.BarbershopRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.CityJpaRepository;
+import com.igortullio.barber.adapter.database.repository.CityRepositoryFindAllImpl;
 import com.igortullio.barber.adapter.database.repository.CityRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.OperationJpaRepository;
 import com.igortullio.barber.adapter.database.repository.OperationRepositoryPortImpl;
@@ -96,7 +97,10 @@ public class ServiceConfig {
     public CityService cityService(CityJpaRepository cityJpaRepository,
                                    StateRepositoryPortImpl stateRepositoryPort,
                                    ModelMapper modelMapper) {
-        return new CityService(new CityRepositoryPortImpl(cityJpaRepository, stateRepositoryPort, modelMapper));
+        return new CityService(
+                new CityRepositoryPortImpl(cityJpaRepository, stateRepositoryPort, modelMapper),
+                new CityRepositoryFindAllImpl(cityJpaRepository, modelMapper)
+        );
     }
 
     @Bean

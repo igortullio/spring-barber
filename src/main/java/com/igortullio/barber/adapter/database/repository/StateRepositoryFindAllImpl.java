@@ -22,7 +22,7 @@ public class StateRepositoryFindAllImpl implements RepositoryFindAllPort<State> 
     }
 
     @Override
-    public PageBarber<State> findAll(PageableBarber pageableBarber) {
+    public PageBarber<State> findAll(Object specification, PageableBarber pageableBarber) {
         PageRequest pageRequest = PageRequest.of(pageableBarber.getPage(), pageableBarber.getSize());
 
         Page<State> statePage = stateJpaRepository.findAll(pageRequest)
