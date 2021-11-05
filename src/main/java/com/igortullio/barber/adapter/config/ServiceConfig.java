@@ -15,6 +15,7 @@ import com.igortullio.barber.adapter.database.repository.PermissionRepositoryPor
 import com.igortullio.barber.adapter.database.repository.ScheduleJpaRepository;
 import com.igortullio.barber.adapter.database.repository.ScheduleRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.StateJpaRepository;
+import com.igortullio.barber.adapter.database.repository.StateRepositoryFindAllImpl;
 import com.igortullio.barber.adapter.database.repository.StateRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.UserJpaRepository;
 import com.igortullio.barber.adapter.database.repository.UserRepositoryPortImpl;
@@ -101,7 +102,10 @@ public class ServiceConfig {
     @Bean
     public StateService stateService(StateJpaRepository stateJpaRepository,
                                      ModelMapper modelMapper) {
-        return new StateService(new StateRepositoryPortImpl(stateJpaRepository, modelMapper));
+        return new StateService(
+                new StateRepositoryPortImpl(stateJpaRepository, modelMapper),
+                new StateRepositoryFindAllImpl(stateJpaRepository, modelMapper)
+        );
     }
 
 }
