@@ -68,7 +68,7 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule> {
     public Schedule update(Long id, Schedule schedule) {
         try {
             Schedule scheduleInDB = find(id);
-            scheduleInDB.setTime(schedule.getTime());
+            scheduleInDB.setDateTime(schedule.getDateTime());
 
             User user = userRepositoryPort.find(schedule.getUser().getId());
             scheduleInDB.setUser(user);

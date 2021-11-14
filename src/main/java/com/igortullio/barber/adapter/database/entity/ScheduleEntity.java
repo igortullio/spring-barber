@@ -15,7 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -26,7 +26,7 @@ import java.time.LocalTime;
 public class ScheduleEntity extends AbstractEntity {
 
     @Column(nullable = false)
-    private LocalTime time;
+    private OffsetDateTime dateTime;
 
     @Enumerated(EnumType.STRING)
     private ScheduleStatus status;

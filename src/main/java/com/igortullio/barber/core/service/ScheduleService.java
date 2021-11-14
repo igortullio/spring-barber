@@ -5,6 +5,9 @@ import com.igortullio.barber.core.domain.Schedule;
 import com.igortullio.barber.core.exception.BarberException;
 import com.igortullio.barber.core.port.RepositoryPort;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 public class ScheduleService implements InterfaceService<Schedule> {
 
     private final RepositoryPort<Schedule> scheduleRepository;
@@ -41,28 +44,43 @@ public class ScheduleService implements InterfaceService<Schedule> {
     private void verify(Schedule schedule) {
         Operation operation = operationRepository.find(schedule.getOperation().getId());
 
+        verifyIfDateTimeNotPassed(schedule);
+        verifyDayIsCorrect(schedule, operation);
         verifyFormatTime(schedule);
         verifyIfInBounds(schedule, operation);
         verifyIfTimeAlreadyExists(schedule, operation);
     }
 
+    private void verifyIfDateTimeNotPassed(Schedule schedule) {
+        if (!LocalDateTime.now().isBefore(schedule.getDateTime().toLocalDateTime())) {
+            throw new BarberException("DateTime (" + schedule.getDateTime() + ") has passed");
+        }
+    }
+
+    private void verifyDayIsCorrect(Schedule schedule, Operation operation) {
+        if (!schedule.getDateTime().getDayOfWeek().equals(operation.getDay())) {
+            throw new BarberException("Day (" + schedule.getDateTime().getDayOfWeek() + ") not match of operation day (" + operation.getDay() + ")");
+        }
+    }
+
     private void verifyFormatTime(Schedule schedule) {
-        int minute = schedule.getTime().getMinute();
+        int minute = schedule.getDateTime().getMinute();
         if (minute != 0 && minute != 30) {
-            throw new BarberException("Time (" + schedule.getTime() + ") in wrong format");
+            throw new BarberException("Time (" + schedule.getDateTime().getHour() + ":" + minute + ") in wrong format");
         }
     }
 
     private void verifyIfInBounds(Schedule schedule, Operation operation) {
-        if (schedule.getTime().compareTo(operation.getOpenTime()) < 0
-                || schedule.getTime().compareTo(operation.getCloseTime()) > 0) {
-            throw new BarberException("Time (" + schedule.getTime() + ") out of bounds");
+        LocalTime dateTimeSchedule = LocalTime.of(schedule.getDateTime().getHour(), schedule.getDateTime().getMinute());
+        if (dateTimeSchedule.compareTo(operation.getOpenTime()) < 0
+                || dateTimeSchedule.compareTo(operation.getCloseTime()) > 0) {
+            throw new BarberException("Time (" + dateTimeSchedule + ") out of bounds");
         }
     }
 
     private void verifyIfTimeAlreadyExists(Schedule schedule, Operation operation) {
-        if (operation.getScheduleSet().stream().anyMatch(s -> s.getTime().equals(schedule.getTime()))) {
-            throw new BarberException("Time (" + schedule.getTime() + ") already exists");
+        if (operation.getScheduleSet().stream().anyMatch(s -> s.getDateTime().equals(schedule.getDateTime()))) {
+            throw new BarberException("Time (" + schedule.getDateTime() + ") already exists");
         }
     }
 

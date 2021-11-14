@@ -5,14 +5,14 @@ import lombok.Setter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 public class ScheduleDtoInput extends AbstractDtoInput {
 
     @NotNull
-    private LocalTime time;
+    private OffsetDateTime dateTime;
 
     @Valid
     @NotNull

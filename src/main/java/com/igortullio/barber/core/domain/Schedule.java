@@ -2,21 +2,21 @@ package com.igortullio.barber.core.domain;
 
 import com.igortullio.barber.core.domain.enumeration.ScheduleStatus;
 
-import java.time.LocalTime;
+import java.time.OffsetDateTime;
 
 public class Schedule extends AbstractDomain {
 
-    private LocalTime time;
+    private OffsetDateTime dateTime;
     private ScheduleStatus status;
     private Operation operation;
     private User user;
 
-    public LocalTime getTime() {
-        return time;
+    public OffsetDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public void setDateTime(OffsetDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Operation getOperation() {

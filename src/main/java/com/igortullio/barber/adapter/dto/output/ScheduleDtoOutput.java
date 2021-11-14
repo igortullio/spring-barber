@@ -3,13 +3,13 @@ package com.igortullio.barber.adapter.dto.output;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 public class ScheduleDtoOutput extends AbstractDtoOutput {
 
-    private LocalTime time;
+    private OffsetDateTime dateTime;
     private String status;
     private OperationDtoOutput operation;
     private UserDtoOutput user;
