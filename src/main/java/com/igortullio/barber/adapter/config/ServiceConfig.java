@@ -16,6 +16,7 @@ import com.igortullio.barber.adapter.database.repository.PermissionGroupReposito
 import com.igortullio.barber.adapter.database.repository.PermissionJpaRepository;
 import com.igortullio.barber.adapter.database.repository.PermissionRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.ScheduleJpaRepository;
+import com.igortullio.barber.adapter.database.repository.ScheduleRepositoryFindAllImpl;
 import com.igortullio.barber.adapter.database.repository.ScheduleRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.StateJpaRepository;
 import com.igortullio.barber.adapter.database.repository.StateRepositoryFindAllImpl;
@@ -71,6 +72,7 @@ public class ServiceConfig {
                                            ModelMapper modelMapper) {
         return new ScheduleService(
                 new ScheduleRepositoryPortImpl(scheduleJpaRepository, userRepositoryPort, operationRepositoryPort, modelMapper),
+                new ScheduleRepositoryFindAllImpl(scheduleJpaRepository, modelMapper),
                 new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, modelMapper)
         );
     }

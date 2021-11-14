@@ -3,20 +3,31 @@ package com.igortullio.barber.core.service;
 import com.igortullio.barber.core.domain.Operation;
 import com.igortullio.barber.core.domain.Schedule;
 import com.igortullio.barber.core.exception.BarberException;
+import com.igortullio.barber.core.pageable.PageBarber;
+import com.igortullio.barber.core.pageable.PageableBarber;
+import com.igortullio.barber.core.port.RepositoryFindAllPort;
 import com.igortullio.barber.core.port.RepositoryPort;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class ScheduleService implements InterfaceService<Schedule> {
+public class ScheduleService implements InterfaceService<Schedule>, InterfaceFindAllService<Schedule> {
 
     private final RepositoryPort<Schedule> scheduleRepository;
+    private final RepositoryFindAllPort<Schedule> scheduleRepositoryFindAll;
     private final RepositoryPort<Operation> operationRepository;
 
     public ScheduleService(RepositoryPort<Schedule> scheduleRepository,
+                           RepositoryFindAllPort<Schedule> scheduleRepositoryFindAll,
                            RepositoryPort<Operation> operationRepository) {
         this.scheduleRepository = scheduleRepository;
+        this.scheduleRepositoryFindAll = scheduleRepositoryFindAll;
         this.operationRepository = operationRepository;
+    }
+
+    @Override
+    public PageBarber<Schedule> findAll(Object o, PageableBarber pageableBarber) {
+        return scheduleRepositoryFindAll.findAll(o, pageableBarber);
     }
 
     @Override
