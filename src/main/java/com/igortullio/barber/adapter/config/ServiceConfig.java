@@ -9,6 +9,7 @@ import com.igortullio.barber.adapter.database.repository.CityJpaRepository;
 import com.igortullio.barber.adapter.database.repository.CityRepositoryFindAllImpl;
 import com.igortullio.barber.adapter.database.repository.CityRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.OperationJpaRepository;
+import com.igortullio.barber.adapter.database.repository.OperationRepositoryFindAllImpl;
 import com.igortullio.barber.adapter.database.repository.OperationRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.PermissionGroupJpaRepository;
 import com.igortullio.barber.adapter.database.repository.PermissionGroupRepositoryPortImpl;
@@ -42,7 +43,10 @@ public class ServiceConfig {
     public OperationService operationService(OperationJpaRepository operationJpaRepository,
                                              BarbershopRepositoryPortImpl barbershopRepositoryPort,
                                              ModelMapper modelMapper) {
-        return new OperationService(new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, modelMapper));
+        return new OperationService(
+                new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, modelMapper),
+                new OperationRepositoryFindAllImpl(operationJpaRepository, modelMapper)
+        );
     }
 
     @Bean

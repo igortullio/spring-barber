@@ -3,6 +3,7 @@ package com.igortullio.barber.adapter.specifications;
 import com.igortullio.barber.adapter.database.entity.AddressEntity;
 import com.igortullio.barber.adapter.database.entity.BarbershopEntity;
 import com.igortullio.barber.adapter.database.entity.CityEntity;
+import com.igortullio.barber.adapter.database.entity.OperationEntity;
 import com.igortullio.barber.adapter.database.entity.StateEntity;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,6 +29,15 @@ public class SpecificationTemplate {
             Join<AddressEntity, CityEntity> joinCity = joinAddress.join("city");
 
             return cb.equal(joinCity.get("id"), cityId);
+        };
+    }
+
+    public static Specification<OperationEntity> operationBarbershopId(Long barbershopId) {
+        return (root, query, cb) -> {
+            query.distinct(true);
+            Join<OperationEntity, BarbershopEntity> joinBarbershop = root.join("barbershop");
+
+            return cb.equal(joinBarbershop.get("id"), barbershopId);
         };
     }
 

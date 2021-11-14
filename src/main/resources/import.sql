@@ -50,6 +50,15 @@ INSERT INTO barbershop (date_create, date_update, address_id, name, active, user
 INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 5, 'Barbershop 5', true, 2);
 
 
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 6, '08:00', '20:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 0, '08:00', '20:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 1, '08:00', '20:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 2, '08:00', '20:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 3, '08:00', '20:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 4, '08:00', '20:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 5, '08:00', '20:00');
+
+
 INSERT INTO permission_group (date_create, date_update, name) VALUES (current_timestamp, current_timestamp, 'GROUP_ADMIN');
 INSERT INTO permission_group (date_create, date_update, name) VALUES (current_timestamp, current_timestamp, 'GROUP_USER');
 
