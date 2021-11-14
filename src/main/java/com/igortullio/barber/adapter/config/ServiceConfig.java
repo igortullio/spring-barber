@@ -3,6 +3,7 @@ package com.igortullio.barber.adapter.config;
 import com.igortullio.barber.adapter.database.repository.AddressJpaRepository;
 import com.igortullio.barber.adapter.database.repository.AddressRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.BarbershopJpaRepository;
+import com.igortullio.barber.adapter.database.repository.BarbershopRepositoryFindAllImpl;
 import com.igortullio.barber.adapter.database.repository.BarbershopRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.CityJpaRepository;
 import com.igortullio.barber.adapter.database.repository.CityRepositoryFindAllImpl;
@@ -90,7 +91,10 @@ public class ServiceConfig {
                                                AddressRepositoryPortImpl addressRepositoryPort,
                                                UserRepositoryPortImpl userRepositoryPort,
                                                ModelMapper modelMapper) {
-        return new BarbershopService(new BarbershopRepositoryPortImpl(barbershopJpaRepository, addressRepositoryPort, userRepositoryPort, modelMapper));
+        return new BarbershopService(
+                new BarbershopRepositoryPortImpl(barbershopJpaRepository, addressRepositoryPort, userRepositoryPort, modelMapper),
+                new BarbershopRepositoryFindAllImpl(barbershopJpaRepository, modelMapper)
+        );
     }
 
     @Bean

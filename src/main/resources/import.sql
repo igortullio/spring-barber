@@ -32,11 +32,22 @@ INSERT INTO city (date_create, date_update, name, state_id) VALUES (current_time
 INSERT INTO city (date_create, date_update, name, state_id) VALUES (current_timestamp, current_timestamp, 'Ceilândia', 7);
 
 
-INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 1, '11111-000', 'Teste Teste', 10, 15, 'Teste');
+INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 1, '11111-000', 'Place 1', 10, 15, 'Teste');
+INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 1, '11111-000', 'Place 2', 10, 15, 'Teste');
+INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 2, '11111-000', 'Place 3', 10, 15, 'Teste');
+INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 2, '11111-000', 'Place 4', 10, 15, 'Teste');
+INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 2, '11111-000', 'Place 5', 10, 15, 'Teste');
 
 
 INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'John Doe', 'johndoe@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61912345678', true);
 INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'Doe John', 'doejohn@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61987654321', true);
+
+
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 1, 'Barbershop 1', true, 1);
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 2, 'Barbershop 2', true, 1);
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 3, 'Barbershop 3', true, 1);
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 4, 'Barbershop 4', true, 2);
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 5, 'Barbershop 5', true, 2);
 
 
 INSERT INTO permission_group (date_create, date_update, name) VALUES (current_timestamp, current_timestamp, 'GROUP_ADMIN');

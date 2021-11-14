@@ -1,14 +1,25 @@
 package com.igortullio.barber.core.service;
 
 import com.igortullio.barber.core.domain.Barbershop;
+import com.igortullio.barber.core.pageable.PageBarber;
+import com.igortullio.barber.core.pageable.PageableBarber;
+import com.igortullio.barber.core.port.RepositoryFindAllPort;
 import com.igortullio.barber.core.port.RepositoryPort;
 
-public class BarbershopService implements InterfaceService<Barbershop> {
+public class BarbershopService implements InterfaceService<Barbershop>, InterfaceFindAllService<Barbershop> {
 
     private final RepositoryPort<Barbershop> barbershopRepository;
+    private final RepositoryFindAllPort<Barbershop> repositoryFindAll;
 
-    public BarbershopService(RepositoryPort<Barbershop> barbershopRepository) {
+    public BarbershopService(RepositoryPort<Barbershop> barbershopRepository,
+                             RepositoryFindAllPort<Barbershop> repositoryFindAll) {
         this.barbershopRepository = barbershopRepository;
+        this.repositoryFindAll = repositoryFindAll;
+    }
+
+    @Override
+    public PageBarber<Barbershop> findAll(Object o, PageableBarber pageableBarber) {
+        return repositoryFindAll.findAll(o, pageableBarber);
     }
 
     @Override
