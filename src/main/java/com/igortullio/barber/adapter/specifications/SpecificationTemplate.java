@@ -5,6 +5,8 @@ import com.igortullio.barber.adapter.database.entity.AddressEntity;
 import com.igortullio.barber.adapter.database.entity.BarbershopEntity;
 import com.igortullio.barber.adapter.database.entity.CityEntity;
 import com.igortullio.barber.adapter.database.entity.OperationEntity;
+import com.igortullio.barber.adapter.database.entity.PermissionEntity;
+import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.entity.ScheduleEntity;
 import com.igortullio.barber.adapter.database.entity.StateEntity;
 import com.igortullio.barber.adapter.database.entity.UserEntity;
@@ -70,6 +72,19 @@ public class SpecificationTemplate {
 
             Predicate[] predicates = predicateList.toArray(new Predicate[0]);
             return cb.and(predicates);
+        };
+    }
+
+    public static Specification<PermissionGroupEntity> permissionGroupPermissionId(Long permissionId) {
+        if (Objects.isNull(permissionId)) {
+            return null;
+        }
+
+        return (root, query, cb) -> {
+            query.distinct(true);
+            Join<PermissionGroupEntity, PermissionEntity> joinPermission = root.join("permissionSet");
+
+            return cb.equal(joinPermission.get("id"), permissionId);
         };
     }
 
