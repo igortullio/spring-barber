@@ -1,16 +1,26 @@
 package com.igortullio.barber.adapter.controller;
 
 import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
+import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.PermissionGroupDtoInput;
 import com.igortullio.barber.adapter.dto.output.PermissionGroupDtoOutput;
 import com.igortullio.barber.core.domain.PermissionGroup;
+import com.igortullio.barber.core.pageable.PageBarber;
+import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.PermissionGroupService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
 @RestController
 @RequestMapping("/groups")
@@ -22,6 +32,22 @@ public class PermissionGroupController extends AbstractController<PermissionGrou
     public PermissionGroupController(ModelMapper modelMapper, PermissionGroupService permissionGroupService) {
         super(modelMapper);
         this.permissionGroupService = permissionGroupService;
+    }
+
+    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Page<PermissionGroupDtoOutput> getAll(Pageable pageable) {
+        PageableBarber pageableBarber = PageablePortMapper.of(pageable);
+
+        PageBarber<PermissionGroup> permissionGroupPageBarber = permissionGroupService.findAll(null, pageableBarber);
+
+        List<PermissionGroupDtoOutput> permissionGroupDtoOutputs = permissionGroupPageBarber.getList()
+                .stream()
+                .map(permissionGroup -> modelMapper.map(permissionGroup, PermissionGroupDtoOutput.class))
+                .toList();
+
+        return new PageImpl<>(permissionGroupDtoOutputs, pageable, permissionGroupPageBarber.getPageable().getTotalElements());
     }
 
     @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })

@@ -33,7 +33,7 @@ public class PermissionGroupRepositoryPortImpl implements RepositoryPort<Permiss
     @Override
     public PermissionGroup save(PermissionGroup permissionGroup) {
         PermissionGroupEntity permissionGroupEntity = modelMapper.map(permissionGroup, PermissionGroupEntity.class);
-        permissionGroupEntity.setName(permissionGroupEntity.getName().toUpperCase());
+        permissionGroupEntity.setName(permissionGroupEntity.getName());
 
         permissionGroupEntity = permissionGroupJpaRepository.save(permissionGroupEntity);
         return modelMapper.map(permissionGroupEntity, PermissionGroup.class);
@@ -42,7 +42,7 @@ public class PermissionGroupRepositoryPortImpl implements RepositoryPort<Permiss
     @Override
     public PermissionGroup update(Long id, PermissionGroup permissionGroup) {
         PermissionGroup permissionGroupInDB = find(id);
-        permissionGroupInDB.setName(permissionGroup.getName().toUpperCase());
+        permissionGroupInDB.setName(permissionGroup.getName());
 
         PermissionGroupEntity permissionGroupEntity = modelMapper.map(permissionGroupInDB, PermissionGroupEntity.class);
         permissionGroupEntity = permissionGroupJpaRepository.save(permissionGroupEntity);

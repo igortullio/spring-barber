@@ -12,6 +12,7 @@ import com.igortullio.barber.adapter.database.repository.OperationJpaRepository;
 import com.igortullio.barber.adapter.database.repository.OperationRepositoryFindAllImpl;
 import com.igortullio.barber.adapter.database.repository.OperationRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.PermissionGroupJpaRepository;
+import com.igortullio.barber.adapter.database.repository.PermissionGroupRepositoryFindAllImpl;
 import com.igortullio.barber.adapter.database.repository.PermissionGroupRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.PermissionJpaRepository;
 import com.igortullio.barber.adapter.database.repository.PermissionRepositoryPortImpl;
@@ -60,7 +61,10 @@ public class ServiceConfig {
     @Bean
     public PermissionGroupService permissionGroupService(PermissionGroupJpaRepository permissionGroupJpaRepository,
                                                          ModelMapper modelMapper) {
-        return new PermissionGroupService(new PermissionGroupRepositoryPortImpl(permissionGroupJpaRepository, modelMapper));
+        return new PermissionGroupService(
+                new PermissionGroupRepositoryPortImpl(permissionGroupJpaRepository, modelMapper),
+                new PermissionGroupRepositoryFindAllImpl(permissionGroupJpaRepository, modelMapper)
+        );
     }
 
     @Bean
