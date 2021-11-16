@@ -19,7 +19,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BarbershopRepositoryPortImpl implements RepositoryPort<Barbershop> {
+public class BarbershopRepositoryPortImpl extends AbstractRepository
+        implements RepositoryPort<Barbershop> {
 
     private final BarbershopJpaRepository barbershopJpaRepository;
     private final AddressRepositoryPortImpl addressRepositoryPort;
@@ -52,7 +53,8 @@ public class BarbershopRepositoryPortImpl implements RepositoryPort<Barbershop> 
             Address address = addressRepositoryPort.find(barbershopEntity.getAddress().getId());
             barbershopEntity.setAddress(modelMapper.map(address, AddressEntity.class));
 
-            User owner = userRepositoryPort.find(barbershopEntity.getOwner().getId());
+            UserEntity userLogged = getUserLogged();
+            User owner = userRepositoryPort.find(userLogged.getId());
             barbershopEntity.setOwner(modelMapper.map(owner, UserEntity.class));
 
             barbershopEntity = barbershopJpaRepository.save(barbershopEntity);
@@ -72,7 +74,10 @@ public class BarbershopRepositoryPortImpl implements RepositoryPort<Barbershop> 
             Address address = addressRepositoryPort.find(barbershop.getAddress().getId());
             barbershopInDB.setAddress(address);
 
-            User owner = userRepositoryPort.find(barbershop.getOwner().getId());
+            UserEntity userLogged = getUserLogged();
+            verifyIfUserLoggedIsOwner(barbershopInDB, userLogged);
+
+            User owner = userRepositoryPort.find(userLogged.getId());
             barbershopInDB.setOwner(owner);
 
             BarbershopEntity barbershopEntity = modelMapper.map(barbershopInDB, BarbershopEntity.class);
@@ -93,6 +98,12 @@ public class BarbershopRepositoryPortImpl implements RepositoryPort<Barbershop> 
             throw new BarbershopNotFoundException(id);
         } catch (DataIntegrityViolationException exception) {
             throw new BarbershopInUseException(id);
+        }
+    }
+
+    private void verifyIfUserLoggedIsOwner(Barbershop barbershop, UserEntity userLogged) {
+        if (!barbershop.getOwner().getId().equals(userLogged.getId())) {
+            throw new BarberException("Barbershop owner is not user logged");
         }
     }
 

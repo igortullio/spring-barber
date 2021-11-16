@@ -21,19 +21,9 @@ public class BarbershopDtoInput extends AbstractDtoInput {
     @NotNull
     private AddressBarbershopDtoInput address;
 
-    @Valid
-    @NotNull
-    private UserBarbershopDtoInput owner;
-
     @Getter
     @Setter
     private static class AddressBarbershopDtoInput extends AbstractDtoInput {
-
-    }
-
-    @Getter
-    @Setter
-    private static class UserBarbershopDtoInput extends AbstractDtoInput {
 
     }
 

@@ -18,19 +18,9 @@ public class ScheduleDtoInput extends AbstractDtoInput {
     @NotNull
     private OperationScheduleDtoInput operation;
 
-    @Valid
-    @NotNull
-    private UserScheduleDtoInput user;
-
     @Getter
     @Setter
     private static class OperationScheduleDtoInput extends AbstractDtoInput {
-
-    }
-
-    @Getter
-    @Setter
-    private static class UserScheduleDtoInput extends AbstractDtoInput {
 
     }
 

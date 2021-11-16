@@ -21,7 +21,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, RepositorySchedulePort {
+public class ScheduleRepositoryPortImpl extends AbstractRepository
+        implements RepositoryPort<Schedule>, RepositorySchedulePort {
 
     private final ScheduleJpaRepository scheduleJpaRepository;
     private final UserRepositoryPortImpl userRepositoryPort;
@@ -51,7 +52,8 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, Rep
         try {
             ScheduleEntity scheduleEntity = modelMapper.map(schedule, ScheduleEntity.class);
 
-            User user = userRepositoryPort.find(scheduleEntity.getUser().getId());
+            UserEntity userLogged = getUserLogged();
+            User user = userRepositoryPort.find(userLogged.getId());
             scheduleEntity.setUser(modelMapper.map(user, UserEntity.class));
 
             Operation operation = operationRepositoryPort.find(scheduleEntity.getOperation().getId());
@@ -71,7 +73,10 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, Rep
             Schedule scheduleInDB = find(id);
             scheduleInDB.setDateTime(schedule.getDateTime());
 
-            User user = userRepositoryPort.find(schedule.getUser().getId());
+            UserEntity userLogged = getUserLogged();
+            verifyIfUserLoggedIsScheduleUser(scheduleInDB, userLogged);
+
+            User user = userRepositoryPort.find(userLogged.getId());
             scheduleInDB.setUser(user);
 
             Operation operation = operationRepositoryPort.find(schedule.getOperation().getId());
@@ -103,6 +108,8 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, Rep
         Schedule scheduleInDB = find(id);
         scheduleInDB.setStatus(ScheduleStatus.CONFIRMED);
 
+        verifyBarbershopOwner(scheduleInDB);
+
         ScheduleEntity scheduleEntity = modelMapper.map(scheduleInDB, ScheduleEntity.class);
         scheduleJpaRepository.save(scheduleEntity);
     }
@@ -112,8 +119,33 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, Rep
         Schedule scheduleInDB = find(id);
         scheduleInDB.setStatus(ScheduleStatus.CANCELED);
 
+        verifyUserScheduleAndBarbershopOwner(scheduleInDB);
+
         ScheduleEntity scheduleEntity = modelMapper.map(scheduleInDB, ScheduleEntity.class);
         scheduleJpaRepository.save(scheduleEntity);
+    }
+
+    private void verifyUserScheduleAndBarbershopOwner(Schedule schedule) {
+        UserEntity userLogged = getUserLogged();
+
+        if (!userLogged.getId().equals(schedule.getOperation().getBarbershop().getOwner().getId())
+                && !userLogged.getId().equals(schedule.getUser().getId())) {
+            throw new BarberException("Logged user is not barbershop owner or client");
+        }
+    }
+
+    private void verifyBarbershopOwner(Schedule schedule) {
+        UserEntity userLogged = getUserLogged();
+
+        if (!userLogged.getId().equals(schedule.getOperation().getBarbershop().getOwner().getId())) {
+            throw new BarberException("Barbershop owner is not logged user");
+        }
+    }
+
+    private void verifyIfUserLoggedIsScheduleUser(Schedule schedule, UserEntity userLogged) {
+        if (!schedule.getUser().getId().equals(userLogged.getId())) {
+            throw new BarberException("Schedule owner is not user logged");
+        }
     }
 
 }
