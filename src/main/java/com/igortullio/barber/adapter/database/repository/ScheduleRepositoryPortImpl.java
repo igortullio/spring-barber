@@ -14,13 +14,14 @@ import com.igortullio.barber.core.exception.not_found.BarbershopNotFoundExceptio
 import com.igortullio.barber.core.exception.not_found.ScheduleNotFoundException;
 import com.igortullio.barber.core.exception.not_found.UserNotFoundException;
 import com.igortullio.barber.core.port.RepositoryPort;
+import com.igortullio.barber.core.port.RepositorySchedulePort;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule> {
+public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, RepositorySchedulePort {
 
     private final ScheduleJpaRepository scheduleJpaRepository;
     private final UserRepositoryPortImpl userRepositoryPort;
@@ -95,6 +96,24 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule> {
         } catch (DataIntegrityViolationException exception) {
             throw new ScheduleInUseException(id);
         }
+    }
+
+    @Override
+    public void confirm(Long id) {
+        Schedule scheduleInDB = find(id);
+        scheduleInDB.setStatus(ScheduleStatus.CONFIRMED);
+
+        ScheduleEntity scheduleEntity = modelMapper.map(scheduleInDB, ScheduleEntity.class);
+        scheduleJpaRepository.save(scheduleEntity);
+    }
+
+    @Override
+    public void cancel(Long id) {
+        Schedule scheduleInDB = find(id);
+        scheduleInDB.setStatus(ScheduleStatus.CANCELED);
+
+        ScheduleEntity scheduleEntity = modelMapper.map(scheduleInDB, ScheduleEntity.class);
+        scheduleJpaRepository.save(scheduleEntity);
     }
 
 }

@@ -7,6 +7,7 @@ import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.port.RepositoryFindAllPort;
 import com.igortullio.barber.core.port.RepositoryPort;
+import com.igortullio.barber.core.port.RepositorySchedulePort;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -14,13 +15,16 @@ import java.time.LocalTime;
 public class ScheduleService implements InterfaceService<Schedule>, InterfaceFindAllService<Schedule> {
 
     private final RepositoryPort<Schedule> scheduleRepository;
+    private final RepositorySchedulePort repositorySchedulePort;
     private final RepositoryFindAllPort<Schedule> scheduleRepositoryFindAll;
     private final RepositoryPort<Operation> operationRepository;
 
     public ScheduleService(RepositoryPort<Schedule> scheduleRepository,
+                           RepositorySchedulePort repositorySchedulePort,
                            RepositoryFindAllPort<Schedule> scheduleRepositoryFindAll,
                            RepositoryPort<Operation> operationRepository) {
         this.scheduleRepository = scheduleRepository;
+        this.repositorySchedulePort = repositorySchedulePort;
         this.scheduleRepositoryFindAll = scheduleRepositoryFindAll;
         this.operationRepository = operationRepository;
     }
@@ -50,6 +54,14 @@ public class ScheduleService implements InterfaceService<Schedule>, InterfaceFin
     @Override
     public void delete(Long id) {
         scheduleRepository.delete(id);
+    }
+
+    public void confirm(Long id) {
+        repositorySchedulePort.confirm(id);
+    }
+
+    public void cancel(Long id) {
+        repositorySchedulePort.cancel(id);
     }
 
     private void verify(Schedule schedule) {

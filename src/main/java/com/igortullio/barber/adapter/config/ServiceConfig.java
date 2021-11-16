@@ -78,8 +78,11 @@ public class ServiceConfig {
                                            OperationJpaRepository operationJpaRepository,
                                            BarbershopRepositoryPortImpl barbershopRepositoryPort,
                                            ModelMapper modelMapper) {
+        ScheduleRepositoryPortImpl scheduleRepository = new ScheduleRepositoryPortImpl(scheduleJpaRepository, userRepositoryPort, operationRepositoryPort, modelMapper);
+
         return new ScheduleService(
-                new ScheduleRepositoryPortImpl(scheduleJpaRepository, userRepositoryPort, operationRepositoryPort, modelMapper),
+                scheduleRepository,
+                scheduleRepository,
                 new ScheduleRepositoryFindAllImpl(scheduleJpaRepository, modelMapper),
                 new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, modelMapper)
         );
