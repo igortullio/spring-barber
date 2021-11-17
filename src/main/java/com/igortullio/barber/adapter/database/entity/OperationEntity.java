@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
+import java.time.OffsetTime;
 import java.util.Set;
 
 @Getter
@@ -31,10 +31,10 @@ public class OperationEntity extends AbstractEntity {
     private DayOfWeek day;
 
     @Column(nullable = false)
-    private LocalTime openTime;
+    private OffsetTime openTime;
 
     @Column(nullable = false)
-    private LocalTime closeTime;
+    private OffsetTime closeTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "barbershop_id")

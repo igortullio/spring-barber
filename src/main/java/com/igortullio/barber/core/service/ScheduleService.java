@@ -10,7 +10,7 @@ import com.igortullio.barber.core.port.RepositoryPort;
 import com.igortullio.barber.core.port.RepositorySchedulePort;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.OffsetTime;
 
 public class ScheduleService implements InterfaceService<Schedule>, InterfaceFindAllService<Schedule> {
 
@@ -94,10 +94,22 @@ public class ScheduleService implements InterfaceService<Schedule>, InterfaceFin
     }
 
     private void verifyIfInBounds(Schedule schedule, Operation operation) {
-        LocalTime dateTimeSchedule = LocalTime.of(schedule.getDateTime().getHour(), schedule.getDateTime().getMinute());
-        if (dateTimeSchedule.compareTo(operation.getOpenTime()) < 0
-                || dateTimeSchedule.compareTo(operation.getCloseTime()) > 0) {
-            throw new BarberException("Time (" + dateTimeSchedule + ") out of bounds");
+        OffsetTime scheduleTime = schedule.getDateTime().toOffsetTime();
+
+        OffsetTime openTime = operation.getOpenTime();
+        OffsetTime closeTime = operation.getCloseTime();
+
+        boolean isInBetween = false;
+        if (closeTime.isAfter(openTime)) {
+            if (openTime.isBefore(scheduleTime) && closeTime.isAfter(scheduleTime)) {
+                isInBetween = true;
+            }
+        } else if (scheduleTime.isAfter(openTime) || scheduleTime.isBefore(closeTime)) {
+            isInBetween = true;
+        }
+
+        if (!isInBetween) {
+            throw new BarberException("Time (" + scheduleTime + ") out of bounds (" + openTime + "-" + closeTime + ")");
         }
     }
 

@@ -24,11 +24,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/operations")
 public class OperationController extends AbstractController<OperationDtoInput, OperationDtoOutput> {
+
+    private final ZoneOffset jvmTzOffset = ZonedDateTime.now(ZoneId.systemDefault()).getOffset();
 
     private final OperationService operationService;
 
@@ -66,6 +71,9 @@ public class OperationController extends AbstractController<OperationDtoInput, O
     @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public OperationDtoOutput post(OperationDtoInput operationDto) {
+        operationDto.setOpenTime(operationDto.getOpenTime().withOffsetSameInstant(jvmTzOffset));
+        operationDto.setCloseTime(operationDto.getCloseTime().withOffsetSameInstant(jvmTzOffset));
+
         Operation operation = modelMapper.map(operationDto, Operation.class);
         return modelMapper.map(operationService.save(operation), OperationDtoOutput.class);
     }
@@ -73,6 +81,9 @@ public class OperationController extends AbstractController<OperationDtoInput, O
     @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
     @Override
     public OperationDtoOutput put(Long id, OperationDtoInput operationDto) {
+        operationDto.setOpenTime(operationDto.getOpenTime().withOffsetSameInstant(jvmTzOffset));
+        operationDto.setCloseTime(operationDto.getCloseTime().withOffsetSameInstant(jvmTzOffset));
+
         Operation operation = modelMapper.map(operationDto, Operation.class);
         return modelMapper.map(operationService.update(id, operation), OperationDtoOutput.class);
     }

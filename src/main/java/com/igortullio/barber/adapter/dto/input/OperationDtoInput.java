@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
+import java.time.OffsetTime;
 
 @Getter
 @Setter
@@ -16,10 +16,10 @@ public class OperationDtoInput extends AbstractDtoInput {
     private DayOfWeek day;
 
     @NotNull
-    private LocalTime openTime;
+    private OffsetTime openTime;
 
     @NotNull
-    private LocalTime closeTime;
+    private OffsetTime closeTime;
 
     @Valid
     @NotNull

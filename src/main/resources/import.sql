@@ -36,27 +36,13 @@ INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitu
 INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 1, '11111-000', 'Place 2', 10, 15, 'Teste');
 INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 2, '11111-000', 'Place 3', 10, 15, 'Teste');
 INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 2, '11111-000', 'Place 4', 10, 15, 'Teste');
-INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 2, '11111-000', 'Place 5', 10, 15, 'Teste');
+INSERT INTO address (date_create, date_update, city_id, zip_code, place, longitude, latitude, district) VALUES (current_timestamp, current_timestamp, 3, '11111-000', 'Place 5', 10, 15, 'Teste');
 
 
-INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'John Doe', 'johndoe@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61912345678', true);
-INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'Doe John', 'doejohn@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61987654321', true);
-
-
-INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 1, 'Barbershop 1', true, 1);
-INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 2, 'Barbershop 2', true, 1);
-INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 3, 'Barbershop 3', true, 1);
-INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 4, 'Barbershop 4', true, 2);
-INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 5, 'Barbershop 5', true, 2);
-
-
-INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 6, '08:00', '20:00');
-INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 0, '08:00', '20:00');
-INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 1, '08:00', '20:00');
-INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 2, '08:00', '20:00');
-INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 3, '08:00', '20:00');
-INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 4, '08:00', '20:00');
-INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 5, '08:00', '20:00');
+INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'Igor Túllio', 'igortullio@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61912345678', true);
+INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'Sarah Santos', 'sarahsantos@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61912345679', true);
+INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'Cristal', 'crital@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61987654321', true);
+INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'John Doe', 'johndoe@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61987654322', true);
 
 
 INSERT INTO permission_group (date_create, date_update, name) VALUES (current_timestamp, current_timestamp, 'GROUP_ADMIN');
@@ -71,3 +57,32 @@ INSERT INTO permission (date_create, date_update, description, name, permission_
 
 INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (1, 1);
 INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (2, 2);
+INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (3, 2);
+INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (4, 2);
+
+
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 1, 'Barbershop 1', true, 2);
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 2, 'Barbershop 2', true, 2);
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 3, 'Barbershop 3', true, 3);
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 4, 'Barbershop 4', true, 3);
+INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 5, 'Barbershop 5', true, 3);
+
+
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 6, '11:00', '23:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 0, '11:00', '23:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 1, '11:00', '23:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 2, '11:00', '23:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 3, '11:00', '23:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 4, '11:00', '23:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 1, 5, '11:00', '23:00');
+
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 2, 6, '13:00', '01:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 2, 0, '13:00', '01:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 2, 1, '13:00', '01:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 2, 2, '13:00', '01:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 2, 3, '13:00', '01:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 2, 4, '13:00', '01:00');
+INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 2, 5, '13:00', '01:00');
+
+
+INSERT INTO schedule (date_create, date_update, user_id, operation_id, status, date_time) VALUES (current_timestamp, current_timestamp, 4, 2, 'CREATED', '2021-11-17 19:00:00');

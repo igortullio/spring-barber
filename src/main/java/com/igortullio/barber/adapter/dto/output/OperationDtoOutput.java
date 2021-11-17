@@ -5,15 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.DayOfWeek;
-import java.time.LocalTime;
+import java.time.OffsetTime;
 
 @Getter
 @Setter
 public class OperationDtoOutput extends AbstractDtoOutput {
 
     private DayOfWeek day;
-    private LocalTime openTime;
-    private LocalTime closeTime;
+    private OffsetTime openTime;
+    private OffsetTime closeTime;
     private BarbershopOperationDtoOutput barbershop;
 
     @Getter

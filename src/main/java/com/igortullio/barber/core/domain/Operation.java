@@ -1,14 +1,14 @@
 package com.igortullio.barber.core.domain;
 
 import java.time.DayOfWeek;
-import java.time.LocalTime;
+import java.time.OffsetTime;
 import java.util.Set;
 
 public class Operation extends AbstractDomain {
 
     private DayOfWeek day;
-    private LocalTime openTime;
-    private LocalTime closeTime;
+    private OffsetTime openTime;
+    private OffsetTime closeTime;
     private Barbershop barbershop;
     private Set<Schedule> scheduleSet;
 
@@ -20,19 +20,19 @@ public class Operation extends AbstractDomain {
         this.day = day;
     }
 
-    public LocalTime getOpenTime() {
+    public OffsetTime getOpenTime() {
         return openTime;
     }
 
-    public void setOpenTime(LocalTime openTime) {
+    public void setOpenTime(OffsetTime openTime) {
         this.openTime = openTime;
     }
 
-    public LocalTime getCloseTime() {
+    public OffsetTime getCloseTime() {
         return closeTime;
     }
 
-    public void setCloseTime(LocalTime closeTime) {
+    public void setCloseTime(OffsetTime closeTime) {
         this.closeTime = closeTime;
     }
 
