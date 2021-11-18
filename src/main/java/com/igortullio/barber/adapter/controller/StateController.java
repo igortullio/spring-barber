@@ -1,9 +1,9 @@
 package com.igortullio.barber.adapter.controller;
 
-import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.StateDtoInput;
 import com.igortullio.barber.adapter.dto.output.StateDtoOutput;
+import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.domain.State;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
@@ -34,7 +34,7 @@ public class StateController extends AbstractController<StateDtoInput, StateDtoO
         this.stateService = stateService;
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<StateDtoOutput> getAll(Pageable pageable) {
@@ -49,28 +49,28 @@ public class StateController extends AbstractController<StateDtoInput, StateDtoO
         return new PageImpl<>(stateDtoOutputs, pageable, statePageBarber.getPageable().getTotalElements());
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @Override
     public StateDtoOutput get(Long id) {
         State state = stateService.find(id);
         return modelMapper.map(state, StateDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public StateDtoOutput post(StateDtoInput stateDto) {
         State state = modelMapper.map(stateDto, State.class);
         return modelMapper.map(stateService.save(state), StateDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public StateDtoOutput put(Long id, StateDtoInput stateDto) {
         State state = modelMapper.map(stateDto, State.class);
         return modelMapper.map(stateService.update(id, state), StateDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public void delete(Long id) {
         stateService.delete(id);

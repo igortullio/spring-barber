@@ -1,8 +1,8 @@
 package com.igortullio.barber.adapter.controller;
 
-import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.dto.input.UserDtoInput;
 import com.igortullio.barber.adapter.dto.output.UserDtoOutput;
+import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.domain.User;
 import com.igortullio.barber.core.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -24,7 +24,7 @@ public class UserController extends AbstractController<UserDtoInput, UserDtoOutp
         this.userService = userService;
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN })
     @Override
     public UserDtoOutput get(Long id) {
         User user = userService.find(id);
@@ -37,14 +37,14 @@ public class UserController extends AbstractController<UserDtoInput, UserDtoOutp
         return modelMapper.map(userService.save(user), UserDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @Override
     public UserDtoOutput put(Long id, UserDtoInput userDto) {
         User user = modelMapper.map(userDto, User.class);
         return modelMapper.map(userService.update(id, user), UserDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public void delete(Long id) {
         userService.delete(id);

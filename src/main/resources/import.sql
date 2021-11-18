@@ -43,10 +43,12 @@ INSERT INTO user_barber (date_create, date_update, name, email, password, phone,
 INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'Sarah Santos', 'sarahsantos@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61912345679', true);
 INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'Cristal', 'crital@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61987654321', true);
 INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'John Doe', 'johndoe@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61987654322', true);
+INSERT INTO user_barber (date_create, date_update, name, email, password, phone, enabled) VALUES (current_timestamp, current_timestamp, 'Doe John', 'doejohn@hotmail.com', '$2a$10$GDnd2HME/FoumxHg6SEZ2u.bmrVp7hsyVxv5Di3KkZeegCKRoXf.C', '61987654323', true);
 
 
 INSERT INTO permission_group (date_create, date_update, name) VALUES (current_timestamp, current_timestamp, 'GROUP_ADMIN');
 INSERT INTO permission_group (date_create, date_update, name) VALUES (current_timestamp, current_timestamp, 'GROUP_USER');
+INSERT INTO permission_group (date_create, date_update, name) VALUES (current_timestamp, current_timestamp, 'GROUP_BARBERSHOP_OWNER');
 
 
 INSERT INTO permission (date_create, date_update, description, name, permission_group_id) VALUES (current_timestamp, current_timestamp, 'Request POST', 'MAKE_POST', 1);
@@ -56,9 +58,10 @@ INSERT INTO permission (date_create, date_update, description, name, permission_
 
 
 INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (1, 1);
-INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (2, 2);
-INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (3, 2);
+INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (2, 3);
+INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (3, 3);
 INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (4, 2);
+INSERT INTO user_barber_permission_group (user_barber_id, permission_group_id) VALUES (5, 2);
 
 
 INSERT INTO barbershop (date_create, date_update, address_id, name, active, user_id) VALUES (current_timestamp, current_timestamp, 1, 'Barbershop 1', true, 2);
@@ -85,4 +88,4 @@ INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, 
 INSERT INTO operation (date_create, date_update, barbershop_id, day, open_time, close_time) VALUES (current_timestamp, current_timestamp, 2, 5, '13:00', '01:00');
 
 
-INSERT INTO schedule (date_create, date_update, user_id, operation_id, status, date_time) VALUES (current_timestamp, current_timestamp, 4, 2, 'CREATED', '2021-11-17 19:00:00');
+INSERT INTO schedule (date_create, date_update, user_id, operation_id, status, date_time) VALUES (current_timestamp, current_timestamp, 4, 2, 'CREATED', '2021-11-18 19:00:00');

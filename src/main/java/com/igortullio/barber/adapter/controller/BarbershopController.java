@@ -1,13 +1,13 @@
 package com.igortullio.barber.adapter.controller;
 
 import com.igortullio.barber.adapter.database.entity.BarbershopEntity;
-import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.BarbershopDtoInput;
 import com.igortullio.barber.adapter.dto.output.BarbershopDtoOutput;
 import com.igortullio.barber.adapter.dto.output.BarbershopFindAllDtoOutput;
 import com.igortullio.barber.adapter.specifications.SpecificationTemplate;
 import com.igortullio.barber.core.domain.Barbershop;
+import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.BarbershopService;
@@ -39,7 +39,7 @@ public class BarbershopController extends AbstractController<BarbershopDtoInput,
         this.barbershopService = barbershopService;
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<BarbershopFindAllDtoOutput> getAll(@RequestParam Long cityId,
@@ -57,28 +57,28 @@ public class BarbershopController extends AbstractController<BarbershopDtoInput,
         return new PageImpl<>(barbershopDtoOutputs, pageable, barbershopPageBarber.getPageable().getTotalElements());
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @Override
     public BarbershopDtoOutput get(Long id) {
         Barbershop barbershop = barbershopService.find(id);
         return modelMapper.map(barbershop, BarbershopDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public BarbershopDtoOutput post(BarbershopDtoInput barbershopDto) {
         Barbershop barbershop = modelMapper.map(barbershopDto, Barbershop.class);
         return modelMapper.map(barbershopService.save(barbershop), BarbershopDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public BarbershopDtoOutput put(Long id, BarbershopDtoInput barbershopDto) {
         Barbershop barbershop = modelMapper.map(barbershopDto, Barbershop.class);
         return modelMapper.map(barbershopService.update(id, barbershop), BarbershopDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public void delete(Long id) {
         barbershopService.delete(id);

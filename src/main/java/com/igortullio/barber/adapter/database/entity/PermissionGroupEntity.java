@@ -24,9 +24,6 @@ import java.util.Set;
 @Table(name = "permission_group")
 public class PermissionGroupEntity extends AbstractEntity implements GrantedAuthority {
 
-    public static final String ADMIN = "GROUP_ADMIN";
-    public static final String USER = "GROUP_USER";
-
     @Column(nullable = false, unique = true)
     private String name;
 

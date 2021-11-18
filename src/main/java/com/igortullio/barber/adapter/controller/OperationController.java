@@ -1,12 +1,12 @@
 package com.igortullio.barber.adapter.controller;
 
 import com.igortullio.barber.adapter.database.entity.OperationEntity;
-import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.OperationDtoInput;
 import com.igortullio.barber.adapter.dto.output.OperationDtoOutput;
 import com.igortullio.barber.adapter.specifications.SpecificationTemplate;
 import com.igortullio.barber.core.domain.Operation;
+import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.OperationService;
@@ -43,7 +43,7 @@ public class OperationController extends AbstractController<OperationDtoInput, O
         this.operationService = operationService;
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<OperationDtoOutput> getAll(@RequestParam Long barbershopId,
@@ -61,14 +61,14 @@ public class OperationController extends AbstractController<OperationDtoInput, O
         return new PageImpl<>(operationDtoOutputs, pageable, operationPageBarber.getPageable().getTotalElements());
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @Override
     public OperationDtoOutput get(Long id) {
         Operation operation = operationService.find(id);
         return modelMapper.map(operation, OperationDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public OperationDtoOutput post(OperationDtoInput operationDto) {
         operationDto.setOpenTime(operationDto.getOpenTime().withOffsetSameInstant(jvmTzOffset));
@@ -78,7 +78,7 @@ public class OperationController extends AbstractController<OperationDtoInput, O
         return modelMapper.map(operationService.save(operation), OperationDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public OperationDtoOutput put(Long id, OperationDtoInput operationDto) {
         operationDto.setOpenTime(operationDto.getOpenTime().withOffsetSameInstant(jvmTzOffset));
@@ -88,7 +88,7 @@ public class OperationController extends AbstractController<OperationDtoInput, O
         return modelMapper.map(operationService.update(id, operation), OperationDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public void delete(Long id) {
         operationService.delete(id);

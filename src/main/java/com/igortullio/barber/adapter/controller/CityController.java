@@ -1,12 +1,12 @@
 package com.igortullio.barber.adapter.controller;
 
 import com.igortullio.barber.adapter.database.entity.CityEntity;
-import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.CityDtoInput;
 import com.igortullio.barber.adapter.dto.output.CityDtoOutput;
 import com.igortullio.barber.adapter.specifications.SpecificationTemplate;
 import com.igortullio.barber.core.domain.City;
+import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.CityService;
@@ -38,7 +38,7 @@ public class CityController extends AbstractController<CityDtoInput, CityDtoOutp
         this.cityService = cityService;
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<CityDtoOutput> getAll(@RequestParam Long stateId,
@@ -56,28 +56,28 @@ public class CityController extends AbstractController<CityDtoInput, CityDtoOutp
         return new PageImpl<>(cityDtoOutputs, pageable, cityPageBarber.getPageable().getTotalElements());
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @Override
     public CityDtoOutput get(Long id) {
         City city = cityService.find(id);
         return modelMapper.map(city, CityDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public CityDtoOutput post(CityDtoInput cityDto) {
         City city = modelMapper.map(cityDto, City.class);
         return modelMapper.map(cityService.save(city), CityDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public CityDtoOutput put(Long id, CityDtoInput cityDto) {
         City city = modelMapper.map(cityDto, City.class);
         return modelMapper.map(cityService.update(id, city), CityDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public void delete(Long id) {
         cityService.delete(id);

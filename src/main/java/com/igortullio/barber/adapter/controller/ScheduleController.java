@@ -1,13 +1,13 @@
 package com.igortullio.barber.adapter.controller;
 
 import com.igortullio.barber.adapter.controller.param.ScheduleParam;
-import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.entity.ScheduleEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.ScheduleDtoInput;
 import com.igortullio.barber.adapter.dto.output.ScheduleDtoOutput;
 import com.igortullio.barber.adapter.dto.output.ScheduleFindAllDtoOutput;
 import com.igortullio.barber.adapter.specifications.SpecificationTemplate;
+import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.domain.Schedule;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
@@ -41,7 +41,7 @@ public class ScheduleController extends AbstractController<ScheduleDtoInput, Sch
         this.scheduleService = scheduleService;
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<ScheduleFindAllDtoOutput> getAll(ScheduleParam scheduleParam,
@@ -59,40 +59,40 @@ public class ScheduleController extends AbstractController<ScheduleDtoInput, Sch
         return new PageImpl<>(scheduleDtoOutputs, pageable, schedulePageBarber.getPageable().getTotalElements());
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @Override
     public ScheduleDtoOutput get(Long id) {
         Schedule schedule = scheduleService.find(id);
         return modelMapper.map(schedule, ScheduleDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.USER })
     @Override
     public ScheduleDtoOutput post(ScheduleDtoInput scheduleDto) {
         Schedule schedule = modelMapper.map(scheduleDto, Schedule.class);
         return modelMapper.map(scheduleService.save(schedule), ScheduleDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.USER })
     @Override
     public ScheduleDtoOutput put(Long id, ScheduleDtoInput scheduleDto) {
         Schedule schedule = modelMapper.map(scheduleDto, Schedule.class);
         return modelMapper.map(scheduleService.update(id, schedule), ScheduleDtoOutput.class);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.USER })
     @Override
     public void delete(Long id) {
         scheduleService.delete(id);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @PutMapping("/{id}/confirm")
     public void confirm(@PathVariable Long id) {
         scheduleService.confirm(id);
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @PutMapping("/{id}/cancel")
     public void cancel(@PathVariable Long id) {
         scheduleService.cancel(id);

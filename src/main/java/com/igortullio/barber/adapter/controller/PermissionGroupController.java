@@ -37,7 +37,7 @@ public class PermissionGroupController extends AbstractController<PermissionGrou
         this.permissionGroupService = permissionGroupService;
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<PermissionGroupDtoOutput> getAll(@RequestParam(required = false) Long permissionId,
@@ -55,28 +55,28 @@ public class PermissionGroupController extends AbstractController<PermissionGrou
         return new PageImpl<>(permissionGroupDtoOutputs, pageable, permissionGroupPageBarber.getPageable().getTotalElements());
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @Override
     public PermissionGroupDtoOutput get(Long id) {
         PermissionGroup permissionGroup = permissionGroupService.find(id);
         return modelMapper.map(permissionGroup, PermissionGroupDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public PermissionGroupDtoOutput post(PermissionGroupDtoInput permissionGroupDto) {
         PermissionGroup permissionGroup = modelMapper.map(permissionGroupDto, PermissionGroup.class);
         return modelMapper.map(permissionGroupService.save(permissionGroup), PermissionGroupDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public PermissionGroupDtoOutput put(Long id, PermissionGroupDtoInput permissionGroupDto) {
         PermissionGroup permissionGroup = modelMapper.map(permissionGroupDto, PermissionGroup.class);
         return modelMapper.map(permissionGroupService.update(id, permissionGroup), PermissionGroupDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public void delete(Long id) {
         permissionGroupService.delete(id);

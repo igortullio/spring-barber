@@ -1,10 +1,10 @@
 package com.igortullio.barber.adapter.controller;
 
-import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.PermissionDtoInput;
 import com.igortullio.barber.adapter.dto.output.PermissionDtoOutput;
 import com.igortullio.barber.core.domain.Permission;
+import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.PermissionService;
@@ -34,7 +34,7 @@ public class PermissionController extends AbstractController<PermissionDtoInput,
         this.permissionService = permissionService;
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<PermissionDtoOutput> getAll(Pageable pageable) {
@@ -50,28 +50,28 @@ public class PermissionController extends AbstractController<PermissionDtoInput,
         return new PageImpl<>(permissionDtoOutputs, pageable, permissionPageBarber.getPageable().getTotalElements());
     }
 
-    @RolesAllowed({ PermissionGroupEntity.ADMIN, PermissionGroupEntity.USER })
+    @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @Override
     public PermissionDtoOutput get(Long id) {
         Permission permission = permissionService.find(id);
         return modelMapper.map(permission, PermissionDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public PermissionDtoOutput post(PermissionDtoInput permissionDto) {
         Permission permission = modelMapper.map(permissionDto, Permission.class);
         return modelMapper.map(permissionService.save(permission), PermissionDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public PermissionDtoOutput put(Long id, PermissionDtoInput permissionDto) {
         Permission permission = modelMapper.map(permissionDto, Permission.class);
         return modelMapper.map(permissionService.update(id, permission), PermissionDtoOutput.class);
     }
 
-    @RolesAllowed(PermissionGroupEntity.ADMIN)
+    @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public void delete(Long id) {
         permissionService.delete(id);
