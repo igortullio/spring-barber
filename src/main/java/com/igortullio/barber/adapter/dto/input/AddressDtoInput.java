@@ -30,9 +30,11 @@ public class AddressDtoInput extends AbstractDtoInput {
 
     private String complement;
 
+    @NotNull
     @Digits(integer = 2, fraction = 7)
     private BigDecimal latitude;
 
+    @NotNull
     @Digits(integer = 3, fraction = 7)
     private BigDecimal longitude;
 
