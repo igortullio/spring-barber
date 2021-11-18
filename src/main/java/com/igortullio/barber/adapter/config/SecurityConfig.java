@@ -4,6 +4,7 @@ import com.igortullio.barber.adapter.config.filter.JwtTokenFilter;
 import com.igortullio.barber.adapter.database.repository.UserJpaRepository;
 import com.igortullio.barber.core.exception.not_found.UserNotFoundException;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -98,6 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // Public endpoints
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/users").permitAll()
                 // Private endpoints
                 .anyRequest().authenticated();
 
