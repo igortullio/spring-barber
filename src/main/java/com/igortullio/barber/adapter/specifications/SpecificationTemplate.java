@@ -1,6 +1,5 @@
 package com.igortullio.barber.adapter.specifications;
 
-import com.igortullio.barber.adapter.controller.param.ScheduleParam;
 import com.igortullio.barber.adapter.database.entity.AddressEntity;
 import com.igortullio.barber.adapter.database.entity.BarbershopEntity;
 import com.igortullio.barber.adapter.database.entity.CityEntity;
@@ -10,7 +9,7 @@ import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.entity.ScheduleEntity;
 import com.igortullio.barber.adapter.database.entity.StateEntity;
 import com.igortullio.barber.adapter.database.entity.UserEntity;
-import com.igortullio.barber.core.exception.BarberException;
+import com.igortullio.barber.adapter.util.SecurityUtil;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -51,23 +50,19 @@ public class SpecificationTemplate {
         };
     }
 
-    public static Specification<ScheduleEntity> scheduleParam(ScheduleParam scheduleParam) {
-        if (Objects.isNull(scheduleParam.getUserId()) && Objects.isNull(scheduleParam.getOperationId())) {
-            throw new BarberException("Get in /schedules must have parameters (" + scheduleParam.toString() + ")");
-        }
+    public static Specification<ScheduleEntity> scheduleParam(Long operationId) {
+        UserEntity userLogged = SecurityUtil.getUserLogged();
 
         return (root, query, cb) -> {
             query.distinct(true);
             List<Predicate> predicateList = new ArrayList<>();
 
-            if (Objects.nonNull(scheduleParam.getUserId())) {
+            if (Objects.isNull(operationId)) {
                 Join<ScheduleEntity, UserEntity> joinUser = root.join("user");
-                predicateList.add(cb.equal(joinUser.get("id"), scheduleParam.getUserId()));
-            }
-
-            if (Objects.nonNull(scheduleParam.getOperationId())) {
+                predicateList.add(cb.equal(joinUser.get("id"), userLogged.getId()));
+            } else {
                 Join<ScheduleEntity, OperationEntity> joinOperation = root.join("operation");
-                predicateList.add(cb.equal(joinOperation.get("id"), scheduleParam.getOperationId()));
+                predicateList.add(cb.equal(joinOperation.get("id"), operationId));
             }
 
             Predicate[] predicates = predicateList.toArray(new Predicate[0]);

@@ -3,6 +3,7 @@ package com.igortullio.barber.adapter.database.repository;
 import com.igortullio.barber.adapter.database.entity.AddressEntity;
 import com.igortullio.barber.adapter.database.entity.BarbershopEntity;
 import com.igortullio.barber.adapter.database.entity.UserEntity;
+import com.igortullio.barber.adapter.util.SecurityUtil;
 import com.igortullio.barber.core.domain.Address;
 import com.igortullio.barber.core.domain.Barbershop;
 import com.igortullio.barber.core.domain.User;
@@ -19,8 +20,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BarbershopRepositoryPortImpl extends AbstractRepository
-        implements RepositoryPort<Barbershop> {
+public class BarbershopRepositoryPortImpl implements RepositoryPort<Barbershop> {
 
     private final BarbershopJpaRepository barbershopJpaRepository;
     private final AddressRepositoryPortImpl addressRepositoryPort;
@@ -53,7 +53,7 @@ public class BarbershopRepositoryPortImpl extends AbstractRepository
             Address address = addressRepositoryPort.find(barbershopEntity.getAddress().getId());
             barbershopEntity.setAddress(modelMapper.map(address, AddressEntity.class));
 
-            UserEntity userLogged = getUserLogged();
+            UserEntity userLogged = SecurityUtil.getUserLogged();
             User owner = userRepositoryPort.find(userLogged.getId());
             barbershopEntity.setOwner(modelMapper.map(owner, UserEntity.class));
 
@@ -74,7 +74,7 @@ public class BarbershopRepositoryPortImpl extends AbstractRepository
             Address address = addressRepositoryPort.find(barbershop.getAddress().getId());
             barbershopInDB.setAddress(address);
 
-            UserEntity userLogged = getUserLogged();
+            UserEntity userLogged = SecurityUtil.getUserLogged();
             verifyIfUserLoggedIsOwner(barbershopInDB, userLogged);
 
             User owner = userRepositoryPort.find(userLogged.getId());

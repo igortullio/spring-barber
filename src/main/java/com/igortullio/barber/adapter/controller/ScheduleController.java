@@ -1,6 +1,5 @@
 package com.igortullio.barber.adapter.controller;
 
-import com.igortullio.barber.adapter.controller.param.ScheduleParam;
 import com.igortullio.barber.adapter.database.entity.ScheduleEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.ScheduleDtoInput;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,11 +44,11 @@ public class ScheduleController extends AbstractController<ScheduleDtoInput, Sch
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<ScheduleFindAllDtoOutput> getAll(ScheduleParam scheduleParam,
+    public Page<ScheduleFindAllDtoOutput> getAll(@RequestParam(required = false) Long operationId,
                                                  Pageable pageable) {
         PageableBarber pageableBarber = PageablePortMapper.of(pageable);
 
-        Specification<ScheduleEntity> spec = SpecificationTemplate.scheduleParam(scheduleParam);
+        Specification<ScheduleEntity> spec = SpecificationTemplate.scheduleParam(operationId);
         PageBarber<Schedule> schedulePageBarber = scheduleService.findAll(spec, pageableBarber);
 
         List<ScheduleFindAllDtoOutput> scheduleDtoOutputs = schedulePageBarber.getList()

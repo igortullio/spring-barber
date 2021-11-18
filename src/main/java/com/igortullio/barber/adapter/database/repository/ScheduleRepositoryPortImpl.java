@@ -3,6 +3,7 @@ package com.igortullio.barber.adapter.database.repository;
 import com.igortullio.barber.adapter.database.entity.OperationEntity;
 import com.igortullio.barber.adapter.database.entity.ScheduleEntity;
 import com.igortullio.barber.adapter.database.entity.UserEntity;
+import com.igortullio.barber.adapter.util.SecurityUtil;
 import com.igortullio.barber.core.domain.Operation;
 import com.igortullio.barber.core.domain.Schedule;
 import com.igortullio.barber.core.domain.User;
@@ -21,8 +22,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ScheduleRepositoryPortImpl extends AbstractRepository
-        implements RepositoryPort<Schedule>, RepositorySchedulePort {
+public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, RepositorySchedulePort {
 
     private final ScheduleJpaRepository scheduleJpaRepository;
     private final UserRepositoryPortImpl userRepositoryPort;
@@ -52,7 +52,7 @@ public class ScheduleRepositoryPortImpl extends AbstractRepository
         try {
             ScheduleEntity scheduleEntity = modelMapper.map(schedule, ScheduleEntity.class);
 
-            UserEntity userLogged = getUserLogged();
+            UserEntity userLogged = SecurityUtil.getUserLogged();
             User user = userRepositoryPort.find(userLogged.getId());
             scheduleEntity.setUser(modelMapper.map(user, UserEntity.class));
 
@@ -73,7 +73,7 @@ public class ScheduleRepositoryPortImpl extends AbstractRepository
             Schedule scheduleInDB = find(id);
             scheduleInDB.setDateTime(schedule.getDateTime());
 
-            UserEntity userLogged = getUserLogged();
+            UserEntity userLogged = SecurityUtil.getUserLogged();
             verifyIfUserLoggedIsScheduleUser(scheduleInDB, userLogged);
 
             User user = userRepositoryPort.find(userLogged.getId());
@@ -126,7 +126,7 @@ public class ScheduleRepositoryPortImpl extends AbstractRepository
     }
 
     private void verifyUserScheduleAndBarbershopOwner(Schedule schedule) {
-        UserEntity userLogged = getUserLogged();
+        UserEntity userLogged = SecurityUtil.getUserLogged();
 
         if (!userLogged.getId().equals(schedule.getOperation().getBarbershop().getOwner().getId())
                 && !userLogged.getId().equals(schedule.getUser().getId())) {
@@ -135,7 +135,7 @@ public class ScheduleRepositoryPortImpl extends AbstractRepository
     }
 
     private void verifyBarbershopOwner(Schedule schedule) {
-        UserEntity userLogged = getUserLogged();
+        UserEntity userLogged = SecurityUtil.getUserLogged();
 
         if (!userLogged.getId().equals(schedule.getOperation().getBarbershop().getOwner().getId())) {
             throw new BarberException("Barbershop owner is not logged user");
