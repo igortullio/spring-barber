@@ -26,7 +26,7 @@ appointments.
 * [State](#state)
 * [User](#user)
 
-## Address [back](#API documentation)
+## Address [(back to top)](#spring-barber)
 
 ### 1. Delete
 
@@ -102,7 +102,7 @@ URL: {{URL}}/addresses/6
 }
 ```
 
-## Auth
+## Auth [(back to top)](#spring-barber)
 
 ### 1. Login
 
@@ -123,7 +123,7 @@ URL: {{URL}}/auth/login
 }
 ```
 
-## Barbershop
+## Barbershop [(back to top)](#spring-barber)
 
 ### 1. Delete
 
@@ -207,7 +207,7 @@ URL: {{URL}}/barbershops/1
 }
 ```
 
-## City
+## City [(back to top)](#spring-barber)
 
 ### 1. Delete
 
@@ -287,7 +287,7 @@ URL: {{URL}}/cities/4
 }
 ```
 
-## Operation
+## Operation [(back to top)](#spring-barber)
 
 ### 1. Delete
 
@@ -371,7 +371,7 @@ URL: {{URL}}/operations/1
 }
 ```
 
-## Permission
+## Permission [(back to top)](#spring-barber)
 
 ### 1. Delete
 
@@ -447,7 +447,7 @@ URL: {{URL}}/permissions/5
 }
 ```
 
-## PermissionGroup
+## PermissionGroup [(back to top)](#spring-barber)
 
 ### 1. Delete
 
@@ -515,7 +515,7 @@ URL: {{URL}}/groups/2
 }
 ```
 
-## Schedule
+## Schedule [(back to top)](#spring-barber)
 
 ### 1. Delete
 
@@ -615,7 +615,7 @@ Type:
 URL: {{URL}}/schedules/1/confirm
 ```
 
-## State
+## State [(back to top)](#spring-barber)
 
 ### 1. Delete
 
@@ -692,7 +692,7 @@ URL: {{URL}}/states/28
 }
 ```
 
-## User
+## User [(back to top)](#spring-barber)
 
 ### 1. Delete
 
