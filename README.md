@@ -9,7 +9,7 @@ appointments.
 
 ## Tables overview
 
-![tables overview](/Users/igortullio/Downloads/Spring Barber.png)
+![Spring Barber](https://user-images.githubusercontent.com/20797306/150369005-98e0fccd-4fe1-4261-9eda-c5edd3557254.png)
 
 --------
 
