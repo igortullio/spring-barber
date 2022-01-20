@@ -692,7 +692,7 @@ URL: {{URL}}/states/28
 }
 ```
 
-## User [(back to top)](#spring-barber)
+## User
 
 ### 1. Delete
 
