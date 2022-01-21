@@ -1,0 +1,16 @@
+server:
+  port: ${PORT}
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: spring-barber
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQL95Dialect
+  datasource:
+    url: ${DATABASE_URL}
