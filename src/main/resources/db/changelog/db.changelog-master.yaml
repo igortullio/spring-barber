@@ -343,3 +343,452 @@ databaseChangeLog:
             name: permission_group_id
             type: BIGINT
         tableName: user_barber_permission_group
+- changeSet:
+    id: insert-permission_group
+    author: igortullio
+    changes:
+    - insert:
+        columns:
+        - column:
+            name: name
+            value: GROUP_ADMIN
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: permission_group
+    - insert:
+        columns:
+        - column:
+            name: name
+            value: GROUP_USER
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: permission_group
+    - insert:
+        columns:
+        - column:
+            name: name
+            value: GROUP_BARBERSHOP_OWNER
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: permission_group
+- changeSet:
+    id: insert-states
+    author: igortullio
+    changes:
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: AC
+        - column:
+            name: name
+            value: Acre
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: AL
+        - column:
+            name: name
+            value: Alagoas
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: AP
+        - column:
+            name: name
+            value: Amapá
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: AM
+        - column:
+            name: name
+            value: Amazonas
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: BA
+        - column:
+            name: name
+            value: Bahia
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: CE
+        - column:
+            name: name
+            value: Ceará
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: DF
+        - column:
+            name: name
+            value: Distrito Federal
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: ES
+        - column:
+            name: name
+            value: Espírito Santo
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: GO
+        - column:
+            name: name
+            value: Goiás
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: MA
+        - column:
+            name: name
+            value: Maranhão
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: MT
+        - column:
+            name: name
+            value: Mato Grosso
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: MS
+        - column:
+            name: name
+            value: Mato Grosso do Sul
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: MG
+        - column:
+            name: name
+            value: Minas Gerais
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: PA
+        - column:
+            name: name
+            value: Pará
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: PB
+        - column:
+            name: name
+            value: Paraíba
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: PR
+        - column:
+            name: name
+            value: Paraná
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: PE
+        - column:
+            name: name
+            value: Pernambuco
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: PI
+        - column:
+            name: name
+            value: Piauí
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: RJ
+        - column:
+            name: name
+            value: Rio de Janeiro
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: RN
+        - column:
+            name: name
+            value: Rio Grande do Norte
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: RS
+        - column:
+            name: name
+            value: Rio Grande do Sul
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: RO
+        - column:
+            name: name
+            value: Rondônia
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: RR
+        - column:
+            name: name
+            value: Roraima
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: SC
+        - column:
+            name: name
+            value: Santa Catarina
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: SP
+        - column:
+            name: name
+            value: São Paulo
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: SE
+        - column:
+            name: name
+            value: Sergipe
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state
+    - insert:
+        columns:
+        - column:
+            name: initials
+            value: TO
+        - column:
+            name: name
+            value: Tocantins
+        - column:
+            name: date_create
+            value: now()
+        - column:
+            name: date_update
+            value: now()
+        tableName: state

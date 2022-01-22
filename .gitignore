@@ -35,3 +35,4 @@ build/
 
 ### Liquibase ###
 /src/main/resources/liquibase.properties
+/src/main/resources/liquibase-outputChangeLog.yaml
