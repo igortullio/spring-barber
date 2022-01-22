@@ -3,9 +3,6 @@ server:
 
 spring:
   jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create-drop
   datasource:
     url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/spring-barber}
     username: ${JDBC_DATABASE_USERNAME:postgres}

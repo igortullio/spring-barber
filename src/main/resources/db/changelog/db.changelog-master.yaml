@@ -1,0 +1,345 @@
+databaseChangeLog:
+- changeSet:
+    id: 1642865144932-1
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: city_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: date_create
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: date_update
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: state_id
+            type: BIGINT
+        tableName: city
+- changeSet:
+    id: 1642865144932-2
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: operation_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: date_create
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: date_update
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: close_time
+            type: TIME WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: day
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: open_time
+            type: TIME WITHOUT TIME ZONE
+        - column:
+            name: barbershop_id
+            type: BIGINT
+        tableName: operation
+- changeSet:
+    id: 1642865144932-3
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: permission_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: date_create
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: date_update
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: description
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: permission_group_id
+            type: BIGINT
+        tableName: permission
+- changeSet:
+    id: 1642865144932-4
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: permission_group_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: date_create
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: date_update
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        tableName: permission_group
+- changeSet:
+    id: 1642865144932-5
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: schedule_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: date_create
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: date_update
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: date_time
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: status
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: operation_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: BIGINT
+        tableName: schedule
+- changeSet:
+    id: 1642865144932-6
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: state_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: date_create
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: date_update
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: initials
+            type: VARCHAR(2)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        tableName: state
+- changeSet:
+    id: 1642865144932-7
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: user_barber_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: date_create
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: date_update
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: enabled
+            type: BOOLEAN
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: password
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: phone
+            type: VARCHAR(255)
+        tableName: user_barber
+- changeSet:
+    id: 1642865144932-8
+    author: igortullio (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: uk_2ojme20jpga3r4r79tdso17gi
+        tableName: permission
+- changeSet:
+    id: 1642865144932-9
+    author: igortullio (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: uk_94ilfetvc2doipy2wavk1l9kc
+        tableName: permission_group
+- changeSet:
+    id: 1642865144932-10
+    author: igortullio (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: uk_2g0hi7w44i4sjkffh61pusaav
+        tableName: state
+- changeSet:
+    id: 1642865144932-11
+    author: igortullio (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: initials
+        constraintName: uk_nc5ywcmo63o061d2ygjtmqequ
+        tableName: state
+- changeSet:
+    id: 1642865144932-12
+    author: igortullio (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: email
+        constraintName: uk_89hey9q5p9j3egj4hvuop0vmr
+        tableName: user_barber
+- changeSet:
+    id: 1642865144932-13
+    author: igortullio (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: phone
+        constraintName: uk_b3j4lwc4mx6u21ugsgu0dwe7y
+        tableName: user_barber
+- changeSet:
+    id: 1642865144932-14
+    author: igortullio (generated)
+    changes:
+    - createSequence:
+        cacheSize: 1
+        cycle: false
+        dataType: bigint
+        incrementBy: 1
+        maxValue: 9223372036854775807
+        minValue: 1
+        sequenceName: hibernate_sequence
+        startValue: 1
+- changeSet:
+    id: 1642865144932-15
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: user_barber_permission_group_pkey
+            name: user_barber_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: user_barber_permission_group_pkey
+            name: permission_group_id
+            type: BIGINT
+        tableName: user_barber_permission_group
