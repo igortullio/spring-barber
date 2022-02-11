@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 
 import java.util.Set;
 
-@Mapper(componentModel = "spring", uses = { OperationMapper.class, UserMapper.class }, config = AbstractMapper.class)
+@Mapper(componentModel = "spring", uses = { OperationMapper.class, UserMapper.class })
 public interface ScheduleMapper {
 
     ScheduleDtoOutput scheduleToScheduleDtoOutput(Schedule schedule);
