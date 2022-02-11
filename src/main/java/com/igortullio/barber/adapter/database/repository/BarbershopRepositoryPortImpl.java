@@ -1,8 +1,10 @@
 package com.igortullio.barber.adapter.database.repository;
 
-import com.igortullio.barber.adapter.database.entity.AddressEntity;
 import com.igortullio.barber.adapter.database.entity.BarbershopEntity;
 import com.igortullio.barber.adapter.database.entity.UserEntity;
+import com.igortullio.barber.adapter.mapper.AddressMapper;
+import com.igortullio.barber.adapter.mapper.BarbershopMapper;
+import com.igortullio.barber.adapter.mapper.UserMapper;
 import com.igortullio.barber.adapter.util.SecurityUtil;
 import com.igortullio.barber.core.domain.Address;
 import com.igortullio.barber.core.domain.Barbershop;
@@ -14,7 +16,6 @@ import com.igortullio.barber.core.exception.not_found.AddressNotFoundException;
 import com.igortullio.barber.core.exception.not_found.BarbershopNotFoundException;
 import com.igortullio.barber.core.exception.not_found.UserNotFoundException;
 import com.igortullio.barber.core.port.RepositoryPort;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
@@ -25,16 +26,22 @@ public class BarbershopRepositoryPortImpl implements RepositoryPort<Barbershop> 
     private final BarbershopJpaRepository barbershopJpaRepository;
     private final AddressRepositoryPortImpl addressRepositoryPort;
     private final UserRepositoryPortImpl userRepositoryPort;
-    private final ModelMapper modelMapper;
+    private final BarbershopMapper barbershopMapper;
+    private final AddressMapper addressMapper;
+    private final UserMapper userMapper;
 
     public BarbershopRepositoryPortImpl(BarbershopJpaRepository barbershopJpaRepository,
                                         AddressRepositoryPortImpl addressJpaRepository,
                                         UserRepositoryPortImpl userJpaRepository,
-                                        ModelMapper modelMapper) {
+                                        BarbershopMapper barbershopMapper,
+                                        AddressMapper addressMapper,
+                                        UserMapper userMapper) {
         this.barbershopJpaRepository = barbershopJpaRepository;
         this.addressRepositoryPort = addressJpaRepository;
         this.userRepositoryPort = userJpaRepository;
-        this.modelMapper = modelMapper;
+        this.barbershopMapper = barbershopMapper;
+        this.addressMapper = addressMapper;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -42,23 +49,23 @@ public class BarbershopRepositoryPortImpl implements RepositoryPort<Barbershop> 
         BarbershopEntity barbershopEntity = barbershopJpaRepository.findById(id)
                 .orElseThrow(() -> new BarbershopNotFoundException(id));
 
-        return modelMapper.map(barbershopEntity, Barbershop.class);
+        return barbershopMapper.barbershopEntityToBarbershop(barbershopEntity);
     }
 
     @Override
     public Barbershop save(Barbershop barbershop) {
         try {
-            BarbershopEntity barbershopEntity = modelMapper.map(barbershop, BarbershopEntity.class);
+            BarbershopEntity barbershopEntity = barbershopMapper.barbershopToBarbershopEntity(barbershop);
 
             Address address = addressRepositoryPort.find(barbershopEntity.getAddress().getId());
-            barbershopEntity.setAddress(modelMapper.map(address, AddressEntity.class));
+            barbershopEntity.setAddress(addressMapper.addressToAddressEntity(address));
 
             UserEntity userLogged = SecurityUtil.getUserLogged();
             User owner = userRepositoryPort.find(userLogged.getId());
-            barbershopEntity.setOwner(modelMapper.map(owner, UserEntity.class));
+            barbershopEntity.setOwner(userMapper.userToUserEntity(owner));
 
             barbershopEntity = barbershopJpaRepository.save(barbershopEntity);
-            return modelMapper.map(barbershopEntity, Barbershop.class);
+            return barbershopMapper.barbershopEntityToBarbershop(barbershopEntity);
         } catch (AbstractNotFoundException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }
@@ -80,10 +87,10 @@ public class BarbershopRepositoryPortImpl implements RepositoryPort<Barbershop> 
             User owner = userRepositoryPort.find(userLogged.getId());
             barbershopInDB.setOwner(owner);
 
-            BarbershopEntity barbershopEntity = modelMapper.map(barbershopInDB, BarbershopEntity.class);
+            BarbershopEntity barbershopEntity = barbershopMapper.barbershopToBarbershopEntity(barbershopInDB);
             barbershopEntity = barbershopJpaRepository.save(barbershopEntity);
 
-            return modelMapper.map(barbershopEntity, Barbershop.class);
+            return barbershopMapper.barbershopEntityToBarbershop(barbershopEntity);
         } catch (AddressNotFoundException | UserNotFoundException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }

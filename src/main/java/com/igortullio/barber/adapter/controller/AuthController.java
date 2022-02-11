@@ -4,8 +4,8 @@ import com.igortullio.barber.adapter.config.filter.JwtTokenUtil;
 import com.igortullio.barber.adapter.database.entity.UserEntity;
 import com.igortullio.barber.adapter.dto.input.AuthDtoInput;
 import com.igortullio.barber.adapter.dto.output.AuthDtoOutput;
+import com.igortullio.barber.adapter.mapper.AuthMapper;
 import com.igortullio.barber.core.exception.BarberException;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,14 +25,14 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    private final ModelMapper modelMapper;
+    private final AuthMapper authMapper;
 
     public AuthController(AuthenticationManager authenticationManager,
                           JwtTokenUtil jwtTokenUtil,
-                          ModelMapper modelMapper) {
+                          AuthMapper authMapper) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
-        this.modelMapper = modelMapper;
+        this.authMapper = authMapper;
     }
 
     @PostMapping("/login")
@@ -45,7 +45,7 @@ public class AuthController {
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, jwtTokenUtil.generateAccessToken(userEntity))
-                    .body(modelMapper.map(userEntity, AuthDtoOutput.class));
+                    .body(authMapper.userEntityToAuthDtoOutput(userEntity));
         } catch (InternalAuthenticationServiceException | BadCredentialsException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }

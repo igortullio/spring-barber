@@ -4,12 +4,12 @@ import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.PermissionGroupDtoInput;
 import com.igortullio.barber.adapter.dto.output.PermissionGroupDtoOutput;
+import com.igortullio.barber.adapter.mapper.PermissionGroupMapper;
 import com.igortullio.barber.adapter.specifications.SpecificationTemplate;
 import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.PermissionGroupService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,14 +27,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/groups")
-public class PermissionGroupController extends AbstractController<PermissionGroupDtoInput, PermissionGroupDtoOutput> {
+public class PermissionGroupController implements InterfaceController<PermissionGroupDtoInput, PermissionGroupDtoOutput> {
 
     private final PermissionGroupService permissionGroupService;
+    private final PermissionGroupMapper permissionGroupMapper;
 
     @Autowired
-    public PermissionGroupController(ModelMapper modelMapper, PermissionGroupService permissionGroupService) {
-        super(modelMapper);
+    public PermissionGroupController(PermissionGroupService permissionGroupService, PermissionGroupMapper permissionGroupMapper) {
         this.permissionGroupService = permissionGroupService;
+        this.permissionGroupMapper = permissionGroupMapper;
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
@@ -49,7 +50,7 @@ public class PermissionGroupController extends AbstractController<PermissionGrou
 
         List<PermissionGroupDtoOutput> permissionGroupDtoOutputs = permissionGroupPageBarber.getList()
                 .stream()
-                .map(permissionGroup -> modelMapper.map(permissionGroup, PermissionGroupDtoOutput.class))
+                .map(permissionGroupMapper::permissionGroupToPermissionGroupDtoOutput)
                 .toList();
 
         return new PageImpl<>(permissionGroupDtoOutputs, pageable, permissionGroupPageBarber.getPageable().getTotalElements());
@@ -59,21 +60,21 @@ public class PermissionGroupController extends AbstractController<PermissionGrou
     @Override
     public PermissionGroupDtoOutput get(Long id) {
         PermissionGroup permissionGroup = permissionGroupService.find(id);
-        return modelMapper.map(permissionGroup, PermissionGroupDtoOutput.class);
+        return permissionGroupMapper.permissionGroupToPermissionGroupDtoOutput(permissionGroup);
     }
 
     @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public PermissionGroupDtoOutput post(PermissionGroupDtoInput permissionGroupDto) {
-        PermissionGroup permissionGroup = modelMapper.map(permissionGroupDto, PermissionGroup.class);
-        return modelMapper.map(permissionGroupService.save(permissionGroup), PermissionGroupDtoOutput.class);
+        PermissionGroup permissionGroup = permissionGroupMapper.permissionGroupDtoInputToPermissionGroup(permissionGroupDto);
+        return permissionGroupMapper.permissionGroupToPermissionGroupDtoOutput(permissionGroupService.save(permissionGroup));
     }
 
     @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public PermissionGroupDtoOutput put(Long id, PermissionGroupDtoInput permissionGroupDto) {
-        PermissionGroup permissionGroup = modelMapper.map(permissionGroupDto, PermissionGroup.class);
-        return modelMapper.map(permissionGroupService.update(id, permissionGroup), PermissionGroupDtoOutput.class);
+        PermissionGroup permissionGroup = permissionGroupMapper.permissionGroupDtoInputToPermissionGroup(permissionGroupDto);
+        return permissionGroupMapper.permissionGroupToPermissionGroupDtoOutput(permissionGroupService.update(id, permissionGroup));
     }
 
     @RolesAllowed(PermissionGroup.ADMIN)

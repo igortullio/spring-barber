@@ -2,11 +2,12 @@ package com.igortullio.barber.adapter.database.repository;
 
 import com.igortullio.barber.adapter.database.entity.OperationEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
+import com.igortullio.barber.adapter.mapper.CycleAvoidingMappingContext;
+import com.igortullio.barber.adapter.mapper.OperationMapper;
 import com.igortullio.barber.core.domain.Operation;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.port.RepositoryFindAllPort;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,11 +17,12 @@ import org.springframework.stereotype.Component;
 public class OperationRepositoryFindAllImpl implements RepositoryFindAllPort<Operation> {
 
     private final OperationJpaRepository operationJpaRepository;
-    private final ModelMapper modelMapper;
+    private final OperationMapper operationMapper;
 
-    public OperationRepositoryFindAllImpl(OperationJpaRepository operationJpaRepository, ModelMapper modelMapper) {
+    public OperationRepositoryFindAllImpl(OperationJpaRepository operationJpaRepository,
+                                          OperationMapper operationMapper) {
         this.operationJpaRepository = operationJpaRepository;
-        this.modelMapper = modelMapper;
+        this.operationMapper = operationMapper;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class OperationRepositoryFindAllImpl implements RepositoryFindAllPort<Ope
         PageRequest pageRequest = PageRequest.of(pageableBarber.getPage(), pageableBarber.getSize());
 
         Page<Operation> operationPage = operationJpaRepository.findAll(spec, pageRequest)
-                .map(operationEntity -> modelMapper.map(operationEntity, Operation.class));
+                .map(operationEntity -> operationMapper.operationEntityToOperation(operationEntity, new CycleAvoidingMappingContext()));
 
         return new PageBarber<>(operationPage.getContent(), PageablePortMapper.of(operationPage));
     }

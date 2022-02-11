@@ -1,6 +1,102 @@
 databaseChangeLog:
 - changeSet:
-    id: 1642865144932-1
+    id: 1642946144254-1
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: address_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: date_create
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: date_update
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: complement
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: district
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: latitude
+            type: numeric(19, 2)
+        - column:
+            constraints:
+              nullable: false
+            name: longitude
+            type: numeric(19, 2)
+        - column:
+            name: number
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: place
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: zip_code
+            type: VARCHAR(255)
+        - column:
+            name: city_id
+            type: BIGINT
+        tableName: address
+- changeSet:
+    id: 1642946144254-2
+    author: igortullio (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: barbershop_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: date_create
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: date_update
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: active
+            type: BOOLEAN
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: address_id
+            type: BIGINT
+        - column:
+            name: user_id
+            type: BIGINT
+        tableName: barbershop
+- changeSet:
+    id: 1642946144254-3
     author: igortullio (generated)
     changes:
     - createTable:
@@ -33,7 +129,7 @@ databaseChangeLog:
             type: BIGINT
         tableName: city
 - changeSet:
-    id: 1642865144932-2
+    id: 1642946144254-4
     author: igortullio (generated)
     changes:
     - createTable:
@@ -74,7 +170,7 @@ databaseChangeLog:
             type: BIGINT
         tableName: operation
 - changeSet:
-    id: 1642865144932-3
+    id: 1642946144254-5
     author: igortullio (generated)
     changes:
     - createTable:
@@ -112,7 +208,7 @@ databaseChangeLog:
             type: BIGINT
         tableName: permission
 - changeSet:
-    id: 1642865144932-4
+    id: 1642946144254-6
     author: igortullio (generated)
     changes:
     - createTable:
@@ -140,7 +236,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: permission_group
 - changeSet:
-    id: 1642865144932-5
+    id: 1642946144254-7
     author: igortullio (generated)
     changes:
     - createTable:
@@ -181,7 +277,7 @@ databaseChangeLog:
             type: BIGINT
         tableName: schedule
 - changeSet:
-    id: 1642865144932-6
+    id: 1642946144254-8
     author: igortullio (generated)
     changes:
     - createTable:
@@ -214,7 +310,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: state
 - changeSet:
-    id: 1642865144932-7
+    id: 1642946144254-9
     author: igortullio (generated)
     changes:
     - createTable:
@@ -262,7 +358,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: user_barber
 - changeSet:
-    id: 1642865144932-8
+    id: 1642946144254-10
     author: igortullio (generated)
     changes:
     - addUniqueConstraint:
@@ -270,7 +366,7 @@ databaseChangeLog:
         constraintName: uk_2ojme20jpga3r4r79tdso17gi
         tableName: permission
 - changeSet:
-    id: 1642865144932-9
+    id: 1642946144254-11
     author: igortullio (generated)
     changes:
     - addUniqueConstraint:
@@ -278,7 +374,7 @@ databaseChangeLog:
         constraintName: uk_94ilfetvc2doipy2wavk1l9kc
         tableName: permission_group
 - changeSet:
-    id: 1642865144932-10
+    id: 1642946144254-12
     author: igortullio (generated)
     changes:
     - addUniqueConstraint:
@@ -286,7 +382,7 @@ databaseChangeLog:
         constraintName: uk_2g0hi7w44i4sjkffh61pusaav
         tableName: state
 - changeSet:
-    id: 1642865144932-11
+    id: 1642946144254-13
     author: igortullio (generated)
     changes:
     - addUniqueConstraint:
@@ -294,7 +390,7 @@ databaseChangeLog:
         constraintName: uk_nc5ywcmo63o061d2ygjtmqequ
         tableName: state
 - changeSet:
-    id: 1642865144932-12
+    id: 1642946144254-14
     author: igortullio (generated)
     changes:
     - addUniqueConstraint:
@@ -302,7 +398,7 @@ databaseChangeLog:
         constraintName: uk_89hey9q5p9j3egj4hvuop0vmr
         tableName: user_barber
 - changeSet:
-    id: 1642865144932-13
+    id: 1642946144254-15
     author: igortullio (generated)
     changes:
     - addUniqueConstraint:
@@ -310,7 +406,7 @@ databaseChangeLog:
         constraintName: uk_b3j4lwc4mx6u21ugsgu0dwe7y
         tableName: user_barber
 - changeSet:
-    id: 1642865144932-14
+    id: 1642946144254-16
     author: igortullio (generated)
     changes:
     - createSequence:
@@ -323,7 +419,7 @@ databaseChangeLog:
         sequenceName: hibernate_sequence
         startValue: 1
 - changeSet:
-    id: 1642865144932-15
+    id: 1642946144254-17
     author: igortullio (generated)
     changes:
     - createTable:
@@ -343,6 +439,156 @@ databaseChangeLog:
             name: permission_group_id
             type: BIGINT
         tableName: user_barber_permission_group
+- changeSet:
+    id: 1642946144254-18
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: operation_id
+        baseTableName: schedule
+        constraintName: fk2c9u4roeduwy9pifd03qiq7v4
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: operation
+        validate: true
+- changeSet:
+    id: 1642946144254-19
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: state_id
+        baseTableName: city
+        constraintName: fk6p2u50v8fg2y0js6djc6xanit
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: state
+        validate: true
+- changeSet:
+    id: 1642946144254-20
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: barbershop
+        constraintName: fkgqd8p5vbtrvahmnp3iju79al1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: user_barber
+        validate: true
+- changeSet:
+    id: 1642946144254-21
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: permission_group_id
+        baseTableName: user_barber_permission_group
+        constraintName: fkhn1beu89f0cur4igjuyx5p8qm
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: permission_group
+        validate: true
+- changeSet:
+    id: 1642946144254-22
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: barbershop_id
+        baseTableName: operation
+        constraintName: fkoqh8rej54fihbrurh9xr2g0ee
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: barbershop
+        validate: true
+- changeSet:
+    id: 1642946144254-23
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: schedule
+        constraintName: fkpfs2o4de177efj7r7g9whom0s
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: user_barber
+        validate: true
+- changeSet:
+    id: 1642946144254-24
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: city_id
+        baseTableName: address
+        constraintName: fkpo044ng5x4gynb291cv24vtea
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: city
+        validate: true
+- changeSet:
+    id: 1642946144254-25
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_barber_id
+        baseTableName: user_barber_permission_group
+        constraintName: fkprgtdmx3nmvaece8doplqg8rs
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: user_barber
+        validate: true
+- changeSet:
+    id: 1642946144254-26
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: address_id
+        baseTableName: barbershop
+        constraintName: fksrhpvokuxa645gonygl6m78r2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: address
+        validate: true
+- changeSet:
+    id: 1642946144254-27
+    author: igortullio (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: permission_group_id
+        baseTableName: permission
+        constraintName: fktqibh46a99ho0ooxbqphdi2js
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: permission_group
+        validate: true
 - changeSet:
     id: insert-permission_group
     author: igortullio

@@ -25,6 +25,15 @@ import com.igortullio.barber.adapter.database.repository.StateRepositoryFindAllI
 import com.igortullio.barber.adapter.database.repository.StateRepositoryPortImpl;
 import com.igortullio.barber.adapter.database.repository.UserJpaRepository;
 import com.igortullio.barber.adapter.database.repository.UserRepositoryPortImpl;
+import com.igortullio.barber.adapter.mapper.AddressMapper;
+import com.igortullio.barber.adapter.mapper.BarbershopMapper;
+import com.igortullio.barber.adapter.mapper.CityMapper;
+import com.igortullio.barber.adapter.mapper.OperationMapper;
+import com.igortullio.barber.adapter.mapper.PermissionGroupMapper;
+import com.igortullio.barber.adapter.mapper.PermissionMapper;
+import com.igortullio.barber.adapter.mapper.ScheduleMapper;
+import com.igortullio.barber.adapter.mapper.StateMapper;
+import com.igortullio.barber.adapter.mapper.UserMapper;
 import com.igortullio.barber.core.service.AddressService;
 import com.igortullio.barber.core.service.BarbershopService;
 import com.igortullio.barber.core.service.CityService;
@@ -34,7 +43,6 @@ import com.igortullio.barber.core.service.PermissionService;
 import com.igortullio.barber.core.service.ScheduleService;
 import com.igortullio.barber.core.service.StateService;
 import com.igortullio.barber.core.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,29 +53,31 @@ public class ServiceConfig {
     @Bean
     public OperationService operationService(OperationJpaRepository operationJpaRepository,
                                              BarbershopRepositoryPortImpl barbershopRepositoryPort,
-                                             ModelMapper modelMapper) {
+                                             OperationMapper operationMapper,
+                                             BarbershopMapper barbershopMapper) {
         return new OperationService(
-                new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, modelMapper),
-                new OperationRepositoryFindAllImpl(operationJpaRepository, modelMapper)
+                new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, operationMapper, barbershopMapper),
+                new OperationRepositoryFindAllImpl(operationJpaRepository, operationMapper)
         );
     }
 
     @Bean
     public PermissionService permissionService(PermissionJpaRepository permissionJpaRepository,
                                                PermissionGroupRepositoryPortImpl permissionGroupRepositoryPort,
-                                               ModelMapper modelMapper) {
+                                               PermissionMapper permissionMapper,
+                                               PermissionGroupMapper permissionGroupMapper) {
         return new PermissionService(
-                new PermissionRepositoryPortImpl(permissionJpaRepository, permissionGroupRepositoryPort, modelMapper),
-                new PermissionRepositoryFindAllImpl(permissionJpaRepository, modelMapper)
+                new PermissionRepositoryPortImpl(permissionJpaRepository, permissionGroupRepositoryPort, permissionMapper, permissionGroupMapper),
+                new PermissionRepositoryFindAllImpl(permissionJpaRepository, permissionMapper)
         );
     }
 
     @Bean
     public PermissionGroupService permissionGroupService(PermissionGroupJpaRepository permissionGroupJpaRepository,
-                                                         ModelMapper modelMapper) {
+                                                         PermissionGroupMapper permissionGroupMapper) {
         return new PermissionGroupService(
-                new PermissionGroupRepositoryPortImpl(permissionGroupJpaRepository, modelMapper),
-                new PermissionGroupRepositoryFindAllImpl(permissionGroupJpaRepository, modelMapper)
+                new PermissionGroupRepositoryPortImpl(permissionGroupJpaRepository, permissionGroupMapper),
+                new PermissionGroupRepositoryFindAllImpl(permissionGroupJpaRepository, permissionGroupMapper)
         );
     }
 
@@ -77,14 +87,17 @@ public class ServiceConfig {
                                            OperationRepositoryPortImpl operationRepositoryPort,
                                            OperationJpaRepository operationJpaRepository,
                                            BarbershopRepositoryPortImpl barbershopRepositoryPort,
-                                           ModelMapper modelMapper) {
-        ScheduleRepositoryPortImpl scheduleRepository = new ScheduleRepositoryPortImpl(scheduleJpaRepository, userRepositoryPort, operationRepositoryPort, modelMapper);
+                                           ScheduleMapper scheduleMapper,
+                                           UserMapper userMapper,
+                                           OperationMapper operationMapper,
+                                           BarbershopMapper barbershopMapper) {
+        ScheduleRepositoryPortImpl scheduleRepository = new ScheduleRepositoryPortImpl(scheduleJpaRepository, userRepositoryPort, operationRepositoryPort, scheduleMapper, userMapper, operationMapper);
 
         return new ScheduleService(
                 scheduleRepository,
                 scheduleRepository,
-                new ScheduleRepositoryFindAllImpl(scheduleJpaRepository, modelMapper),
-                new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, modelMapper)
+                new ScheduleRepositoryFindAllImpl(scheduleJpaRepository, scheduleMapper),
+                new OperationRepositoryPortImpl(operationJpaRepository, barbershopRepositoryPort, operationMapper, barbershopMapper)
         );
     }
 
@@ -92,44 +105,49 @@ public class ServiceConfig {
     public UserService userService(UserJpaRepository userJpaRepository,
                                    PermissionGroupRepositoryPortImpl permissionGroupRepositoryPort,
                                    PasswordEncoder passwordEncoder,
-                                   ModelMapper modelMapper) {
-        return new UserService(new UserRepositoryPortImpl(userJpaRepository, permissionGroupRepositoryPort, passwordEncoder, modelMapper));
+                                   UserMapper userMapper,
+                                   PermissionGroupMapper permissionGroupMapper) {
+        return new UserService(new UserRepositoryPortImpl(userJpaRepository, permissionGroupRepositoryPort, passwordEncoder, userMapper, permissionGroupMapper));
     }
 
     @Bean
     public AddressService addressService(AddressJpaRepository addressJpaRepository,
                                          CityRepositoryPortImpl cityRepositoryPort,
-                                         ModelMapper modelMapper) {
-        return new AddressService(new AddressRepositoryPortImpl(addressJpaRepository, cityRepositoryPort, modelMapper));
+                                         AddressMapper addressMapper,
+                                         CityMapper cityMapper) {
+        return new AddressService(new AddressRepositoryPortImpl(addressJpaRepository, cityRepositoryPort, addressMapper, cityMapper));
     }
 
     @Bean
     public BarbershopService barbershopService(BarbershopJpaRepository barbershopJpaRepository,
                                                AddressRepositoryPortImpl addressRepositoryPort,
                                                UserRepositoryPortImpl userRepositoryPort,
-                                               ModelMapper modelMapper) {
+                                               BarbershopMapper barbershopMapper,
+                                               AddressMapper addressMapper,
+                                               UserMapper userMapper) {
         return new BarbershopService(
-                new BarbershopRepositoryPortImpl(barbershopJpaRepository, addressRepositoryPort, userRepositoryPort, modelMapper),
-                new BarbershopRepositoryFindAllImpl(barbershopJpaRepository, modelMapper)
+                new BarbershopRepositoryPortImpl(barbershopJpaRepository, addressRepositoryPort, userRepositoryPort, barbershopMapper, addressMapper, userMapper),
+                new BarbershopRepositoryFindAllImpl(barbershopJpaRepository, barbershopMapper)
         );
     }
 
     @Bean
     public CityService cityService(CityJpaRepository cityJpaRepository,
                                    StateRepositoryPortImpl stateRepositoryPort,
-                                   ModelMapper modelMapper) {
+                                   CityMapper cityMapper,
+                                   StateMapper stateMapper) {
         return new CityService(
-                new CityRepositoryPortImpl(cityJpaRepository, stateRepositoryPort, modelMapper),
-                new CityRepositoryFindAllImpl(cityJpaRepository, modelMapper)
+                new CityRepositoryPortImpl(cityJpaRepository, stateRepositoryPort, cityMapper, stateMapper),
+                new CityRepositoryFindAllImpl(cityJpaRepository, cityMapper)
         );
     }
 
     @Bean
     public StateService stateService(StateJpaRepository stateJpaRepository,
-                                     ModelMapper modelMapper) {
+                                     StateMapper stateMapper) {
         return new StateService(
-                new StateRepositoryPortImpl(stateJpaRepository, modelMapper),
-                new StateRepositoryFindAllImpl(stateJpaRepository, modelMapper)
+                new StateRepositoryPortImpl(stateJpaRepository, stateMapper),
+                new StateRepositoryFindAllImpl(stateJpaRepository, stateMapper)
         );
     }
 

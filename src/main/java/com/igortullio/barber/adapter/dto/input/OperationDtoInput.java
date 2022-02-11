@@ -27,7 +27,7 @@ public class OperationDtoInput extends AbstractDtoInput {
 
     @Getter
     @Setter
-    private static class BarbershopOperationDtoInput extends AbstractDtoInput {
+    public static class BarbershopOperationDtoInput extends AbstractDtoInput {
 
     }
 

@@ -2,6 +2,9 @@ package com.igortullio.barber.adapter.database.repository;
 
 import com.igortullio.barber.adapter.database.entity.BarbershopEntity;
 import com.igortullio.barber.adapter.database.entity.OperationEntity;
+import com.igortullio.barber.adapter.mapper.BarbershopMapper;
+import com.igortullio.barber.adapter.mapper.CycleAvoidingMappingContext;
+import com.igortullio.barber.adapter.mapper.OperationMapper;
 import com.igortullio.barber.core.domain.Barbershop;
 import com.igortullio.barber.core.domain.Operation;
 import com.igortullio.barber.core.exception.BarberException;
@@ -10,7 +13,6 @@ import com.igortullio.barber.core.exception.not_found.AbstractNotFoundException;
 import com.igortullio.barber.core.exception.not_found.BarbershopNotFoundException;
 import com.igortullio.barber.core.exception.not_found.OperationNotFoundException;
 import com.igortullio.barber.core.port.RepositoryPort;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
@@ -23,14 +25,17 @@ public class OperationRepositoryPortImpl implements RepositoryPort<Operation> {
 
     private final OperationJpaRepository operationJpaRepository;
     private final BarbershopRepositoryPortImpl barbershopRepositoryPort;
-    private final ModelMapper modelMapper;
+    private final OperationMapper operationMapper;
+    private final BarbershopMapper barbershopMapper;
 
     public OperationRepositoryPortImpl(OperationJpaRepository operationJpaRepository,
                                        BarbershopRepositoryPortImpl barbershopRepositoryPort,
-                                       ModelMapper modelMapper) {
+                                       OperationMapper operationMapper,
+                                       BarbershopMapper barbershopMapper) {
         this.operationJpaRepository = operationJpaRepository;
         this.barbershopRepositoryPort = barbershopRepositoryPort;
-        this.modelMapper = modelMapper;
+        this.operationMapper = operationMapper;
+        this.barbershopMapper = barbershopMapper;
     }
 
     @Override
@@ -38,21 +43,21 @@ public class OperationRepositoryPortImpl implements RepositoryPort<Operation> {
         OperationEntity operationEntity = operationJpaRepository.findById(id)
                 .orElseThrow(() -> new OperationNotFoundException(id));
 
-        return modelMapper.map(operationEntity, Operation.class);
+        return operationMapper.operationEntityToOperation(operationEntity, new CycleAvoidingMappingContext());
     }
 
     @Override
     public Operation save(Operation operation) {
         try {
-            OperationEntity operationEntity = modelMapper.map(operation, OperationEntity.class);
+            OperationEntity operationEntity = operationMapper.operationToOperationEntity(operation, new CycleAvoidingMappingContext());
 
             Barbershop barbershop = barbershopRepositoryPort.find(operation.getBarbershop().getId());
-            operationEntity.setBarbershop(modelMapper.map(barbershop, BarbershopEntity.class));
+            operationEntity.setBarbershop(barbershopMapper.barbershopToBarbershopEntity(barbershop));
 
             existsDayInBarbershopWithAnotherId(operation.getDay(), barbershop, null);
 
             operationEntity = operationJpaRepository.save(operationEntity);
-            return modelMapper.map(operationEntity, Operation.class);
+            return operationMapper.operationEntityToOperation(operationEntity, new CycleAvoidingMappingContext());
         } catch (AbstractNotFoundException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }
@@ -71,10 +76,10 @@ public class OperationRepositoryPortImpl implements RepositoryPort<Operation> {
 
             existsDayInBarbershopWithAnotherId(operationInDB.getDay(), barbershop, operationInDB.getId());
 
-            OperationEntity operationEntity = modelMapper.map(operationInDB, OperationEntity.class);
+            OperationEntity operationEntity = operationMapper.operationToOperationEntity(operationInDB, new CycleAvoidingMappingContext());
             operationEntity = operationJpaRepository.save(operationEntity);
 
-            return modelMapper.map(operationEntity, Operation.class);
+            return operationMapper.operationEntityToOperation(operationEntity, new CycleAvoidingMappingContext());
         } catch (BarbershopNotFoundException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }
@@ -95,12 +100,12 @@ public class OperationRepositoryPortImpl implements RepositoryPort<Operation> {
     protected Operation findByDayAndBarbershop(DayOfWeek day, BarbershopEntity barbershopEntity) {
         OperationEntity operationEntity = operationJpaRepository.findByDayAndBarbershop(day, barbershopEntity)
                 .orElseThrow(() -> new OperationNotFoundException(day, barbershopEntity.getName()));
-        return modelMapper.map(operationEntity, Operation.class);
+        return operationMapper.operationEntityToOperation(operationEntity, new CycleAvoidingMappingContext());
     }
 
     private void existsDayInBarbershopWithAnotherId(DayOfWeek day, Barbershop barbershop, Long id) {
         try {
-            BarbershopEntity barbershopEntity = modelMapper.map(barbershop, BarbershopEntity.class);
+            BarbershopEntity barbershopEntity = barbershopMapper.barbershopToBarbershopEntity(barbershop);
             Operation operation = findByDayAndBarbershop(day, barbershopEntity);
 
             if (Objects.isNull(id) || !id.equals(operation.getId())) {

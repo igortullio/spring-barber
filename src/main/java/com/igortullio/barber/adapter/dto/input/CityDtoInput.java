@@ -20,7 +20,7 @@ public class CityDtoInput extends AbstractDtoInput {
 
     @Getter
     @Setter
-    private static class StateDtoCityInput extends AbstractDtoInput {
+    public static class StateDtoCityInput extends AbstractDtoInput {
 
     }
 

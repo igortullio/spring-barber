@@ -5,13 +5,13 @@ import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.BarbershopDtoInput;
 import com.igortullio.barber.adapter.dto.output.BarbershopDtoOutput;
 import com.igortullio.barber.adapter.dto.output.BarbershopFindAllDtoOutput;
+import com.igortullio.barber.adapter.mapper.BarbershopMapper;
 import com.igortullio.barber.adapter.specifications.SpecificationTemplate;
 import com.igortullio.barber.core.domain.Barbershop;
 import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.BarbershopService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,14 +29,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/barbershops")
-public class BarbershopController extends AbstractController<BarbershopDtoInput, BarbershopDtoOutput> {
+public class BarbershopController implements InterfaceController<BarbershopDtoInput, BarbershopDtoOutput> {
 
     private final BarbershopService barbershopService;
+    private final BarbershopMapper barbershopMapper;
 
     @Autowired
-    protected BarbershopController(ModelMapper modelMapper, BarbershopService barbershopService) {
-        super(modelMapper);
+    protected BarbershopController(BarbershopService barbershopService, BarbershopMapper barbershopMapper) {
         this.barbershopService = barbershopService;
+        this.barbershopMapper = barbershopMapper;
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
@@ -51,7 +52,7 @@ public class BarbershopController extends AbstractController<BarbershopDtoInput,
 
         List<BarbershopFindAllDtoOutput> barbershopDtoOutputs = barbershopPageBarber.getList()
                 .stream()
-                .map(barbershop -> modelMapper.map(barbershop, BarbershopFindAllDtoOutput.class))
+                .map(barbershopMapper::barbershopToBarbershopFindAllDtoOutput)
                 .toList();
 
         return new PageImpl<>(barbershopDtoOutputs, pageable, barbershopPageBarber.getPageable().getTotalElements());
@@ -61,21 +62,21 @@ public class BarbershopController extends AbstractController<BarbershopDtoInput,
     @Override
     public BarbershopDtoOutput get(Long id) {
         Barbershop barbershop = barbershopService.find(id);
-        return modelMapper.map(barbershop, BarbershopDtoOutput.class);
+        return barbershopMapper.barbershopToBarbershopDtoOutput(barbershop);
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public BarbershopDtoOutput post(BarbershopDtoInput barbershopDto) {
-        Barbershop barbershop = modelMapper.map(barbershopDto, Barbershop.class);
-        return modelMapper.map(barbershopService.save(barbershop), BarbershopDtoOutput.class);
+        Barbershop barbershop = barbershopMapper.barbershopDtoInputToBarbershop(barbershopDto);
+        return barbershopMapper.barbershopToBarbershopDtoOutput(barbershopService.save(barbershop));
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public BarbershopDtoOutput put(Long id, BarbershopDtoInput barbershopDto) {
-        Barbershop barbershop = modelMapper.map(barbershopDto, Barbershop.class);
-        return modelMapper.map(barbershopService.update(id, barbershop), BarbershopDtoOutput.class);
+        Barbershop barbershop = barbershopMapper.barbershopDtoInputToBarbershop(barbershopDto);
+        return barbershopMapper.barbershopToBarbershopDtoOutput(barbershopService.update(id, barbershop));
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })

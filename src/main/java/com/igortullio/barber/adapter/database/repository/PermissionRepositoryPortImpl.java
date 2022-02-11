@@ -1,7 +1,8 @@
 package com.igortullio.barber.adapter.database.repository;
 
 import com.igortullio.barber.adapter.database.entity.PermissionEntity;
-import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
+import com.igortullio.barber.adapter.mapper.PermissionGroupMapper;
+import com.igortullio.barber.adapter.mapper.PermissionMapper;
 import com.igortullio.barber.core.domain.Permission;
 import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.exception.BarberException;
@@ -9,7 +10,6 @@ import com.igortullio.barber.core.exception.in_use.PermissionInUseException;
 import com.igortullio.barber.core.exception.not_found.AbstractNotFoundException;
 import com.igortullio.barber.core.exception.not_found.PermissionNotFoundException;
 import com.igortullio.barber.core.port.RepositoryPort;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
@@ -19,14 +19,17 @@ public class PermissionRepositoryPortImpl implements RepositoryPort<Permission> 
 
     private final PermissionJpaRepository permissionJpaRepository;
     private final PermissionGroupRepositoryPortImpl permissionGroupRepositoryPort;
-    private final ModelMapper modelMapper;
+    private final PermissionMapper permissionMapper;
+    private final PermissionGroupMapper permissionGroupMapper;
 
     public PermissionRepositoryPortImpl(PermissionJpaRepository permissionJpaRepository,
                                         PermissionGroupRepositoryPortImpl permissionGroupRepositoryPort,
-                                        ModelMapper modelMapper) {
+                                        PermissionMapper permissionMapper,
+                                        PermissionGroupMapper permissionGroupMapper) {
         this.permissionJpaRepository = permissionJpaRepository;
         this.permissionGroupRepositoryPort = permissionGroupRepositoryPort;
-        this.modelMapper = modelMapper;
+        this.permissionMapper = permissionMapper;
+        this.permissionGroupMapper = permissionGroupMapper;
     }
 
     @Override
@@ -34,20 +37,20 @@ public class PermissionRepositoryPortImpl implements RepositoryPort<Permission> 
         PermissionEntity permissionEntity = permissionJpaRepository.findById(id)
                 .orElseThrow(() -> new PermissionNotFoundException(id));
 
-        return modelMapper.map(permissionEntity, Permission.class);
+        return permissionMapper.permissionEntityToPermission(permissionEntity);
     }
 
     @Override
     public Permission save(Permission permission) {
         try {
-            PermissionEntity permissionEntity = modelMapper.map(permission, PermissionEntity.class);
+            PermissionEntity permissionEntity = permissionMapper.permissionToPermissionEntity(permission);
             permissionEntity.setName(permissionEntity.getName().toUpperCase());
 
             PermissionGroup permissionGroup = permissionGroupRepositoryPort.find(permission.getPermissionGroup().getId());
-            permissionEntity.setPermissionGroup(modelMapper.map(permissionGroup, PermissionGroupEntity.class));
+            permissionEntity.setPermissionGroup(permissionGroupMapper.permissionGroupToPermissionGroupEntity(permissionGroup));
 
             permissionEntity = permissionJpaRepository.save(permissionEntity);
-            return modelMapper.map(permissionEntity, Permission.class);
+            return permissionMapper.permissionEntityToPermission(permissionEntity);
         } catch (AbstractNotFoundException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }
@@ -63,10 +66,10 @@ public class PermissionRepositoryPortImpl implements RepositoryPort<Permission> 
             PermissionGroup permissionGroup = permissionGroupRepositoryPort.find(permission.getPermissionGroup().getId());
             permissionInDB.setPermissionGroup(permissionGroup);
 
-            PermissionEntity permissionEntity = modelMapper.map(permissionInDB, PermissionEntity.class);
+            PermissionEntity permissionEntity = permissionMapper.permissionToPermissionEntity(permissionInDB);
             permissionEntity = permissionJpaRepository.save(permissionEntity);
 
-            return modelMapper.map(permissionEntity, Permission.class);
+            return permissionMapper.permissionEntityToPermission(permissionEntity);
         } catch (PermissionNotFoundException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }
