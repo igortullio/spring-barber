@@ -3,12 +3,12 @@ package com.igortullio.barber.adapter.controller;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.PermissionDtoInput;
 import com.igortullio.barber.adapter.dto.output.PermissionDtoOutput;
+import com.igortullio.barber.adapter.mapper.PermissionMapper;
 import com.igortullio.barber.core.domain.Permission;
 import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.PermissionService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,14 +24,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/permissions")
-public class PermissionController extends AbstractController<PermissionDtoInput, PermissionDtoOutput> {
+public class PermissionController implements InterfaceController<PermissionDtoInput, PermissionDtoOutput> {
 
     private final PermissionService permissionService;
+    private final PermissionMapper permissionMapper;
 
     @Autowired
-    public PermissionController(ModelMapper modelMapper, PermissionService permissionService) {
-        super(modelMapper);
+    public PermissionController(PermissionService permissionService, PermissionMapper permissionMapper) {
         this.permissionService = permissionService;
+        this.permissionMapper = permissionMapper;
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
@@ -44,7 +45,7 @@ public class PermissionController extends AbstractController<PermissionDtoInput,
 
         List<PermissionDtoOutput> permissionDtoOutputs = permissionPageBarber.getList()
                 .stream()
-                .map(permission -> modelMapper.map(permission, PermissionDtoOutput.class))
+                .map(permissionMapper::permissionToPermissionDtoOutput)
                 .toList();
 
         return new PageImpl<>(permissionDtoOutputs, pageable, permissionPageBarber.getPageable().getTotalElements());
@@ -54,21 +55,21 @@ public class PermissionController extends AbstractController<PermissionDtoInput,
     @Override
     public PermissionDtoOutput get(Long id) {
         Permission permission = permissionService.find(id);
-        return modelMapper.map(permission, PermissionDtoOutput.class);
+        return permissionMapper.permissionToPermissionDtoOutput(permission);
     }
 
     @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public PermissionDtoOutput post(PermissionDtoInput permissionDto) {
-        Permission permission = modelMapper.map(permissionDto, Permission.class);
-        return modelMapper.map(permissionService.save(permission), PermissionDtoOutput.class);
+        Permission permission = permissionMapper.permissionDtoInputToPermission(permissionDto);
+        return permissionMapper.permissionToPermissionDtoOutput(permissionService.save(permission));
     }
 
     @RolesAllowed(PermissionGroup.ADMIN)
     @Override
     public PermissionDtoOutput put(Long id, PermissionDtoInput permissionDto) {
-        Permission permission = modelMapper.map(permissionDto, Permission.class);
-        return modelMapper.map(permissionService.update(id, permission), PermissionDtoOutput.class);
+        Permission permission = permissionMapper.permissionDtoInputToPermission(permissionDto);
+        return permissionMapper.permissionToPermissionDtoOutput(permissionService.update(id, permission));
     }
 
     @RolesAllowed(PermissionGroup.ADMIN)

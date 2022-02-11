@@ -16,7 +16,7 @@ public class BarbershopFindAllDtoOutput extends AbstractDtoOutput {
 
     @Getter
     @Setter
-    private static class AddressDtoBarbershopFindAllOutput extends AbstractDtoInput {
+    public static class AddressDtoBarbershopFindAllOutput extends AbstractDtoInput {
 
         private String zipCode;
         private String cityName;

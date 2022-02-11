@@ -4,13 +4,14 @@ import com.igortullio.barber.adapter.database.entity.OperationEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.OperationDtoInput;
 import com.igortullio.barber.adapter.dto.output.OperationDtoOutput;
+import com.igortullio.barber.adapter.mapper.CycleAvoidingMappingContext;
+import com.igortullio.barber.adapter.mapper.OperationMapper;
 import com.igortullio.barber.adapter.specifications.SpecificationTemplate;
 import com.igortullio.barber.core.domain.Operation;
 import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.OperationService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,16 +32,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/operations")
-public class OperationController extends AbstractController<OperationDtoInput, OperationDtoOutput> {
+public class OperationController implements InterfaceController<OperationDtoInput, OperationDtoOutput> {
 
     private final ZoneOffset jvmTzOffset = ZonedDateTime.now(ZoneId.systemDefault()).getOffset();
 
     private final OperationService operationService;
+    private final OperationMapper operationMapper;
 
     @Autowired
-    public OperationController(ModelMapper modelMapper, OperationService operationService) {
-        super(modelMapper);
+    public OperationController(OperationService operationService, OperationMapper operationMapper) {
         this.operationService = operationService;
+        this.operationMapper = operationMapper;
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
@@ -55,7 +57,7 @@ public class OperationController extends AbstractController<OperationDtoInput, O
 
         List<OperationDtoOutput> operationDtoOutputs = operationPageBarber.getList()
                 .stream()
-                .map(operation -> modelMapper.map(operation, OperationDtoOutput.class))
+                .map(operation -> operationMapper.operationToOperationDtoOutput(operation, new CycleAvoidingMappingContext()))
                 .toList();
 
         return new PageImpl<>(operationDtoOutputs, pageable, operationPageBarber.getPageable().getTotalElements());
@@ -65,7 +67,7 @@ public class OperationController extends AbstractController<OperationDtoInput, O
     @Override
     public OperationDtoOutput get(Long id) {
         Operation operation = operationService.find(id);
-        return modelMapper.map(operation, OperationDtoOutput.class);
+        return operationMapper.operationToOperationDtoOutput(operation, new CycleAvoidingMappingContext());
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
@@ -74,8 +76,8 @@ public class OperationController extends AbstractController<OperationDtoInput, O
         operationDto.setOpenTime(operationDto.getOpenTime().withOffsetSameInstant(jvmTzOffset));
         operationDto.setCloseTime(operationDto.getCloseTime().withOffsetSameInstant(jvmTzOffset));
 
-        Operation operation = modelMapper.map(operationDto, Operation.class);
-        return modelMapper.map(operationService.save(operation), OperationDtoOutput.class);
+        Operation operation = operationMapper.operationDtoInputToOperation(operationDto);
+        return operationMapper.operationToOperationDtoOutput(operationService.save(operation), new CycleAvoidingMappingContext());
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
@@ -84,8 +86,8 @@ public class OperationController extends AbstractController<OperationDtoInput, O
         operationDto.setOpenTime(operationDto.getOpenTime().withOffsetSameInstant(jvmTzOffset));
         operationDto.setCloseTime(operationDto.getCloseTime().withOffsetSameInstant(jvmTzOffset));
 
-        Operation operation = modelMapper.map(operationDto, Operation.class);
-        return modelMapper.map(operationService.update(id, operation), OperationDtoOutput.class);
+        Operation operation = operationMapper.operationDtoInputToOperation(operationDto);
+        return operationMapper.operationToOperationDtoOutput(operationService.update(id, operation), new CycleAvoidingMappingContext());
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })

@@ -23,7 +23,7 @@ public class PermissionDtoInput extends AbstractDtoInput {
 
     @Getter
     @Setter
-    private static class PermissionGroupDtoCityInput extends AbstractDtoInput {
+    public static class PermissionGroupDtoCityInput extends AbstractDtoInput {
 
     }
 

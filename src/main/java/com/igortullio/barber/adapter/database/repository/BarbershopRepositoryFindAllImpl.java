@@ -2,11 +2,11 @@ package com.igortullio.barber.adapter.database.repository;
 
 import com.igortullio.barber.adapter.database.entity.BarbershopEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
+import com.igortullio.barber.adapter.mapper.BarbershopMapper;
 import com.igortullio.barber.core.domain.Barbershop;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.port.RepositoryFindAllPort;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
 public class BarbershopRepositoryFindAllImpl implements RepositoryFindAllPort<Barbershop> {
 
     private final BarbershopJpaRepository barbershopJpaRepository;
-    private final ModelMapper modelMapper;
+    private final BarbershopMapper barbershopMapper;
 
-    public BarbershopRepositoryFindAllImpl(BarbershopJpaRepository barbershopJpaRepository, ModelMapper modelMapper) {
+    public BarbershopRepositoryFindAllImpl(BarbershopJpaRepository barbershopJpaRepository, BarbershopMapper barbershopMapper) {
         this.barbershopJpaRepository = barbershopJpaRepository;
-        this.modelMapper = modelMapper;
+        this.barbershopMapper = barbershopMapper;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class BarbershopRepositoryFindAllImpl implements RepositoryFindAllPort<Ba
         PageRequest pageRequest = PageRequest.of(pageableBarber.getPage(), pageableBarber.getSize());
 
         Page<Barbershop> barbershopPage = barbershopJpaRepository.findAll(spec, pageRequest)
-                .map(barbershopEntity -> modelMapper.map(barbershopEntity, Barbershop.class));
+                .map(barbershopMapper::barbershopEntityToBarbershop);
 
         return new PageBarber<>(barbershopPage.getContent(), PageablePortMapper.of(barbershopPage));
     }

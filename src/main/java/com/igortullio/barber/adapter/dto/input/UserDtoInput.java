@@ -32,7 +32,7 @@ public class UserDtoInput extends AbstractDtoInput {
 
     @Getter
     @Setter
-    private static class PermissionGroupUserDtoInput extends AbstractDtoInput {
+    public static class PermissionGroupUserDtoInput extends AbstractDtoInput {
 
     }
 

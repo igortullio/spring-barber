@@ -2,13 +2,14 @@ package com.igortullio.barber.adapter.database.repository;
 
 import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
 import com.igortullio.barber.adapter.database.entity.UserEntity;
+import com.igortullio.barber.adapter.mapper.PermissionGroupMapper;
+import com.igortullio.barber.adapter.mapper.UserMapper;
 import com.igortullio.barber.core.domain.User;
 import com.igortullio.barber.core.exception.BarberException;
 import com.igortullio.barber.core.exception.in_use.UserInUseException;
 import com.igortullio.barber.core.exception.not_found.AbstractNotFoundException;
 import com.igortullio.barber.core.exception.not_found.UserNotFoundException;
 import com.igortullio.barber.core.port.RepositoryPort;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,16 +24,19 @@ public class UserRepositoryPortImpl implements RepositoryPort<User> {
     private final UserJpaRepository userJpaRepository;
     private final PermissionGroupRepositoryPortImpl permissionGroupRepositoryPort;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
+    private final PermissionGroupMapper permissionGroupMapper;
 
     public UserRepositoryPortImpl(UserJpaRepository userJpaRepository,
                                   PermissionGroupRepositoryPortImpl permissionGroupRepositoryPort,
                                   PasswordEncoder passwordEncoder,
-                                  ModelMapper modelMapper) {
+                                  UserMapper userMapper,
+                                  PermissionGroupMapper permissionGroupMapper) {
         this.userJpaRepository = userJpaRepository;
         this.permissionGroupRepositoryPort = permissionGroupRepositoryPort;
         this.passwordEncoder = passwordEncoder;
-        this.modelMapper = modelMapper;
+        this.userMapper = userMapper;
+        this.permissionGroupMapper = permissionGroupMapper;
     }
 
     @Override
@@ -40,24 +44,24 @@ public class UserRepositoryPortImpl implements RepositoryPort<User> {
         UserEntity userEntity = userJpaRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        return modelMapper.map(userEntity, User.class);
+        return userMapper.userEntityToUser(userEntity);
     }
 
     @Override
     public User save(User user) {
         try {
-            UserEntity userEntity = modelMapper.map(user, UserEntity.class);
+            UserEntity userEntity = userMapper.userToUserEntity(user);
             userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
             Set<PermissionGroupEntity> permissionGroupSet = userEntity.getPermissionGroupSet()
                     .stream()
                     .map(permissionGroupEntity -> permissionGroupRepositoryPort.find(permissionGroupEntity.getId()))
-                    .map(permissionGroup -> modelMapper.map(permissionGroup, PermissionGroupEntity.class))
+                    .map(permissionGroupMapper::permissionGroupToPermissionGroupEntity)
                     .collect(Collectors.toSet());
             userEntity.setPermissionGroupSet(permissionGroupSet);
 
             userEntity = userJpaRepository.save(userEntity);
-            return modelMapper.map(userEntity, User.class);
+            return userMapper.userEntityToUser(userEntity);
         } catch (AbstractNotFoundException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }
@@ -71,10 +75,10 @@ public class UserRepositoryPortImpl implements RepositoryPort<User> {
         userInDB.setEmail(user.getEmail());
         userInDB.setPhone(user.getPhone());
 
-        UserEntity stateEntity = modelMapper.map(userInDB, UserEntity.class);
-        stateEntity = userJpaRepository.save(stateEntity);
+        UserEntity userEntity = userMapper.userToUserEntity(userInDB);
+        userEntity = userJpaRepository.save(userEntity);
 
-        return modelMapper.map(stateEntity, User.class);
+        return userMapper.userEntityToUser(userEntity);
     }
 
     @Override

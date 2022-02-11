@@ -20,7 +20,7 @@ public class ScheduleDtoInput extends AbstractDtoInput {
 
     @Getter
     @Setter
-    private static class OperationScheduleDtoInput extends AbstractDtoInput {
+    public static class OperationScheduleDtoInput extends AbstractDtoInput {
 
     }
 

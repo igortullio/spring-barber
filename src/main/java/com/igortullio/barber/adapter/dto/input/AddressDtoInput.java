@@ -40,7 +40,7 @@ public class AddressDtoInput extends AbstractDtoInput {
 
     @Getter
     @Setter
-    private static class CityAddressDtoInput extends AbstractDtoInput {
+    public static class CityAddressDtoInput extends AbstractDtoInput {
 
     }
 

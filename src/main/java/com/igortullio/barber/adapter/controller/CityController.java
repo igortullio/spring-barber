@@ -4,13 +4,13 @@ import com.igortullio.barber.adapter.database.entity.CityEntity;
 import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.CityDtoInput;
 import com.igortullio.barber.adapter.dto.output.CityDtoOutput;
+import com.igortullio.barber.adapter.mapper.CityMapper;
 import com.igortullio.barber.adapter.specifications.SpecificationTemplate;
 import com.igortullio.barber.core.domain.City;
 import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.CityService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,14 +28,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cities")
-public class CityController extends AbstractController<CityDtoInput, CityDtoOutput> {
+public class CityController implements InterfaceController<CityDtoInput, CityDtoOutput> {
 
     private final CityService cityService;
+    private final CityMapper cityMapper;
 
     @Autowired
-    protected CityController(ModelMapper modelMapper, CityService cityService) {
-        super(modelMapper);
+    protected CityController(CityService cityService, CityMapper cityMapper) {
         this.cityService = cityService;
+        this.cityMapper = cityMapper;
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
@@ -50,7 +51,7 @@ public class CityController extends AbstractController<CityDtoInput, CityDtoOutp
 
         List<CityDtoOutput> cityDtoOutputs = cityPageBarber.getList()
                 .stream()
-                .map(state -> modelMapper.map(state, CityDtoOutput.class))
+                .map(cityMapper::cityToCityDtoOutput)
                 .toList();
 
         return new PageImpl<>(cityDtoOutputs, pageable, cityPageBarber.getPageable().getTotalElements());
@@ -60,21 +61,21 @@ public class CityController extends AbstractController<CityDtoInput, CityDtoOutp
     @Override
     public CityDtoOutput get(Long id) {
         City city = cityService.find(id);
-        return modelMapper.map(city, CityDtoOutput.class);
+        return cityMapper.cityToCityDtoOutput(city);
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public CityDtoOutput post(CityDtoInput cityDto) {
-        City city = modelMapper.map(cityDto, City.class);
-        return modelMapper.map(cityService.save(city), CityDtoOutput.class);
+        City city = cityMapper.cityDtoInputToCity(cityDto);
+        return cityMapper.cityToCityDtoOutput(cityService.save(city));
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER })
     @Override
     public CityDtoOutput put(Long id, CityDtoInput cityDto) {
-        City city = modelMapper.map(cityDto, City.class);
-        return modelMapper.map(cityService.update(id, city), CityDtoOutput.class);
+        City city = cityMapper.cityDtoInputToCity(cityDto);
+        return cityMapper.cityToCityDtoOutput(cityService.update(id, city));
     }
 
     @RolesAllowed(PermissionGroup.ADMIN)

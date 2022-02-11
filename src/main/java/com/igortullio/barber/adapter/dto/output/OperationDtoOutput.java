@@ -18,7 +18,7 @@ public class OperationDtoOutput extends AbstractDtoOutput {
 
     @Getter
     @Setter
-    private static class BarbershopOperationDtoOutput extends AbstractDtoInput {
+    public static class BarbershopOperationDtoOutput extends AbstractDtoInput {
 
         private String name;
         private Boolean active;
