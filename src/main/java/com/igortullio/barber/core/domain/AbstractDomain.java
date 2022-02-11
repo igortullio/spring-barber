@@ -17,20 +17,20 @@ public abstract class AbstractDomain {
         this.id = id;
     }
 
-    public OffsetDateTime getCreate() {
+    public OffsetDateTime getDateCreate() {
         return dateCreate;
     }
 
-    public void setCreate(OffsetDateTime create) {
-        this.dateCreate = create;
+    public void setDateCreate(OffsetDateTime dateCreate) {
+        this.dateCreate = dateCreate;
     }
 
-    public OffsetDateTime getUpdate() {
+    public OffsetDateTime getDateUpdate() {
         return dateUpdate;
     }
 
-    public void setUpdate(OffsetDateTime update) {
-        this.dateUpdate = update;
+    public void setDateUpdate(OffsetDateTime dateUpdate) {
+        this.dateUpdate = dateUpdate;
     }
 
     @Override

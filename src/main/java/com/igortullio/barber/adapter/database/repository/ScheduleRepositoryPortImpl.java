@@ -1,8 +1,11 @@
 package com.igortullio.barber.adapter.database.repository;
 
-import com.igortullio.barber.adapter.database.entity.OperationEntity;
 import com.igortullio.barber.adapter.database.entity.ScheduleEntity;
 import com.igortullio.barber.adapter.database.entity.UserEntity;
+import com.igortullio.barber.adapter.mapper.CycleAvoidingMappingContext;
+import com.igortullio.barber.adapter.mapper.OperationMapper;
+import com.igortullio.barber.adapter.mapper.ScheduleMapper;
+import com.igortullio.barber.adapter.mapper.UserMapper;
 import com.igortullio.barber.adapter.util.SecurityUtil;
 import com.igortullio.barber.core.domain.Operation;
 import com.igortullio.barber.core.domain.Schedule;
@@ -16,7 +19,6 @@ import com.igortullio.barber.core.exception.not_found.ScheduleNotFoundException;
 import com.igortullio.barber.core.exception.not_found.UserNotFoundException;
 import com.igortullio.barber.core.port.RepositoryPort;
 import com.igortullio.barber.core.port.RepositorySchedulePort;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
@@ -27,16 +29,22 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, Rep
     private final ScheduleJpaRepository scheduleJpaRepository;
     private final UserRepositoryPortImpl userRepositoryPort;
     private final OperationRepositoryPortImpl operationRepositoryPort;
-    private final ModelMapper modelMapper;
+    private final ScheduleMapper scheduleMapper;
+    private final UserMapper userMapper;
+    private final OperationMapper operationMapper;
 
     public ScheduleRepositoryPortImpl(ScheduleJpaRepository scheduleJpaRepository,
                                       UserRepositoryPortImpl userRepositoryPort,
                                       OperationRepositoryPortImpl operationRepositoryPort,
-                                      ModelMapper modelMapper) {
+                                      ScheduleMapper scheduleMapper,
+                                      UserMapper userMapper,
+                                      OperationMapper operationMapper) {
         this.scheduleJpaRepository = scheduleJpaRepository;
         this.userRepositoryPort = userRepositoryPort;
         this.operationRepositoryPort = operationRepositoryPort;
-        this.modelMapper = modelMapper;
+        this.scheduleMapper = scheduleMapper;
+        this.userMapper = userMapper;
+        this.operationMapper = operationMapper;
     }
 
     @Override
@@ -44,24 +52,24 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, Rep
         ScheduleEntity scheduleEntity = scheduleJpaRepository.findById(id)
                 .orElseThrow(() -> new ScheduleNotFoundException(id));
 
-        return modelMapper.map(scheduleEntity, Schedule.class);
+        return scheduleMapper.scheduleEntityToSchedule(scheduleEntity, new CycleAvoidingMappingContext());
     }
 
     @Override
     public Schedule save(Schedule schedule) {
         try {
-            ScheduleEntity scheduleEntity = modelMapper.map(schedule, ScheduleEntity.class);
+            ScheduleEntity scheduleEntity = scheduleMapper.scheduleToScheduleEntity(schedule, new CycleAvoidingMappingContext());
 
             UserEntity userLogged = SecurityUtil.getUserLogged();
             User user = userRepositoryPort.find(userLogged.getId());
-            scheduleEntity.setUser(modelMapper.map(user, UserEntity.class));
+            scheduleEntity.setUser(userMapper.userToUserEntity(user));
 
             Operation operation = operationRepositoryPort.find(scheduleEntity.getOperation().getId());
-            scheduleEntity.setOperation(modelMapper.map(operation, OperationEntity.class));
+            scheduleEntity.setOperation(operationMapper.operationToOperationEntity(operation, new CycleAvoidingMappingContext()));
 
             scheduleEntity.setStatus(ScheduleStatus.CREATED);
             scheduleEntity = scheduleJpaRepository.save(scheduleEntity);
-            return modelMapper.map(scheduleEntity, Schedule.class);
+            return scheduleMapper.scheduleEntityToSchedule(scheduleEntity, new CycleAvoidingMappingContext());
         } catch (AbstractNotFoundException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }
@@ -82,10 +90,10 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, Rep
             Operation operation = operationRepositoryPort.find(schedule.getOperation().getId());
             scheduleInDB.setOperation(operation);
 
-            ScheduleEntity scheduleEntity = modelMapper.map(scheduleInDB, ScheduleEntity.class);
+            ScheduleEntity scheduleEntity = scheduleMapper.scheduleToScheduleEntity(scheduleInDB, new CycleAvoidingMappingContext());
             scheduleEntity = scheduleJpaRepository.save(scheduleEntity);
 
-            return modelMapper.map(scheduleEntity, Schedule.class);
+            return scheduleMapper.scheduleEntityToSchedule(scheduleEntity, new CycleAvoidingMappingContext());
         } catch (UserNotFoundException | BarbershopNotFoundException exception) {
             throw new BarberException(exception.getMessage(), exception);
         }
@@ -110,7 +118,7 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, Rep
 
         verifyBarbershopOwner(scheduleInDB);
 
-        ScheduleEntity scheduleEntity = modelMapper.map(scheduleInDB, ScheduleEntity.class);
+        ScheduleEntity scheduleEntity = scheduleMapper.scheduleToScheduleEntity(scheduleInDB, new CycleAvoidingMappingContext());
         scheduleJpaRepository.save(scheduleEntity);
     }
 
@@ -121,7 +129,7 @@ public class ScheduleRepositoryPortImpl implements RepositoryPort<Schedule>, Rep
 
         verifyUserScheduleAndBarbershopOwner(scheduleInDB);
 
-        ScheduleEntity scheduleEntity = modelMapper.map(scheduleInDB, ScheduleEntity.class);
+        ScheduleEntity scheduleEntity = scheduleMapper.scheduleToScheduleEntity(scheduleInDB, new CycleAvoidingMappingContext());
         scheduleJpaRepository.save(scheduleEntity);
     }
 

@@ -1,11 +1,11 @@
 package com.igortullio.barber.adapter.database.repository;
 
 import com.igortullio.barber.adapter.database.entity.PermissionGroupEntity;
+import com.igortullio.barber.adapter.mapper.PermissionGroupMapper;
 import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.exception.in_use.PermissionGroupInUseException;
 import com.igortullio.barber.core.exception.not_found.PermissionGroupNotFoundException;
 import com.igortullio.barber.core.port.RepositoryPort;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Component;
 public class PermissionGroupRepositoryPortImpl implements RepositoryPort<PermissionGroup> {
 
     private final PermissionGroupJpaRepository permissionGroupJpaRepository;
-    private final ModelMapper modelMapper;
+    private final PermissionGroupMapper permissionGroupMapper;
 
     public PermissionGroupRepositoryPortImpl(PermissionGroupJpaRepository permissionGroupJpaRepository,
-                                             ModelMapper modelMapper) {
+                                             PermissionGroupMapper permissionGroupMapper) {
         this.permissionGroupJpaRepository = permissionGroupJpaRepository;
-        this.modelMapper = modelMapper;
+        this.permissionGroupMapper = permissionGroupMapper;
     }
 
     @Override
@@ -27,16 +27,16 @@ public class PermissionGroupRepositoryPortImpl implements RepositoryPort<Permiss
         PermissionGroupEntity permissionGroupEntity = permissionGroupJpaRepository.findById(id)
                 .orElseThrow(() -> new PermissionGroupNotFoundException(id));
 
-        return modelMapper.map(permissionGroupEntity, PermissionGroup.class);
+        return permissionGroupMapper.permissionGroupEntityToPermissionGroup(permissionGroupEntity);
     }
 
     @Override
     public PermissionGroup save(PermissionGroup permissionGroup) {
-        PermissionGroupEntity permissionGroupEntity = modelMapper.map(permissionGroup, PermissionGroupEntity.class);
+        PermissionGroupEntity permissionGroupEntity = permissionGroupMapper.permissionGroupToPermissionGroupEntity(permissionGroup);
         permissionGroupEntity.setName(permissionGroupEntity.getName());
 
         permissionGroupEntity = permissionGroupJpaRepository.save(permissionGroupEntity);
-        return modelMapper.map(permissionGroupEntity, PermissionGroup.class);
+        return permissionGroupMapper.permissionGroupEntityToPermissionGroup(permissionGroupEntity);
     }
 
     @Override
@@ -44,10 +44,10 @@ public class PermissionGroupRepositoryPortImpl implements RepositoryPort<Permiss
         PermissionGroup permissionGroupInDB = find(id);
         permissionGroupInDB.setName(permissionGroup.getName());
 
-        PermissionGroupEntity permissionGroupEntity = modelMapper.map(permissionGroupInDB, PermissionGroupEntity.class);
+        PermissionGroupEntity permissionGroupEntity = permissionGroupMapper.permissionGroupToPermissionGroupEntity(permissionGroupInDB);
         permissionGroupEntity = permissionGroupJpaRepository.save(permissionGroupEntity);
 
-        return modelMapper.map(permissionGroupEntity, PermissionGroup.class);
+        return permissionGroupMapper.permissionGroupEntityToPermissionGroup(permissionGroupEntity);
     }
 
     @Override

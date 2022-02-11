@@ -5,13 +5,13 @@ import com.igortullio.barber.adapter.database.mapper.PageablePortMapper;
 import com.igortullio.barber.adapter.dto.input.ScheduleDtoInput;
 import com.igortullio.barber.adapter.dto.output.ScheduleDtoOutput;
 import com.igortullio.barber.adapter.dto.output.ScheduleFindAllDtoOutput;
+import com.igortullio.barber.adapter.mapper.ScheduleMapper;
 import com.igortullio.barber.adapter.specifications.SpecificationTemplate;
 import com.igortullio.barber.core.domain.PermissionGroup;
 import com.igortullio.barber.core.domain.Schedule;
 import com.igortullio.barber.core.pageable.PageBarber;
 import com.igortullio.barber.core.pageable.PageableBarber;
 import com.igortullio.barber.core.service.ScheduleService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,14 +31,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
-public class ScheduleController extends AbstractController<ScheduleDtoInput, ScheduleDtoOutput> {
+public class ScheduleController implements InterfaceController<ScheduleDtoInput, ScheduleDtoOutput> {
 
     private final ScheduleService scheduleService;
+    private final ScheduleMapper scheduleMapper;
 
     @Autowired
-    public ScheduleController(ModelMapper modelMapper, ScheduleService scheduleService) {
-        super(modelMapper);
+    public ScheduleController(ScheduleService scheduleService, ScheduleMapper scheduleMapper) {
         this.scheduleService = scheduleService;
+        this.scheduleMapper = scheduleMapper;
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.BARBERSHOP_OWNER, PermissionGroup.USER })
@@ -53,7 +54,7 @@ public class ScheduleController extends AbstractController<ScheduleDtoInput, Sch
 
         List<ScheduleFindAllDtoOutput> scheduleDtoOutputs = schedulePageBarber.getList()
                 .stream()
-                .map(operation -> modelMapper.map(operation, ScheduleFindAllDtoOutput.class))
+                .map(scheduleMapper::scheduleToScheduleFindAllDtoOutput)
                 .toList();
 
         return new PageImpl<>(scheduleDtoOutputs, pageable, schedulePageBarber.getPageable().getTotalElements());
@@ -63,21 +64,21 @@ public class ScheduleController extends AbstractController<ScheduleDtoInput, Sch
     @Override
     public ScheduleDtoOutput get(Long id) {
         Schedule schedule = scheduleService.find(id);
-        return modelMapper.map(schedule, ScheduleDtoOutput.class);
+        return scheduleMapper.scheduleToScheduleDtoOutput(schedule);
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.USER })
     @Override
     public ScheduleDtoOutput post(ScheduleDtoInput scheduleDto) {
-        Schedule schedule = modelMapper.map(scheduleDto, Schedule.class);
-        return modelMapper.map(scheduleService.save(schedule), ScheduleDtoOutput.class);
+        Schedule schedule = scheduleMapper.scheduleDtoInputToSchedule(scheduleDto);
+        return scheduleMapper.scheduleToScheduleDtoOutput(scheduleService.save(schedule));
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.USER })
     @Override
     public ScheduleDtoOutput put(Long id, ScheduleDtoInput scheduleDto) {
-        Schedule schedule = modelMapper.map(scheduleDto, Schedule.class);
-        return modelMapper.map(scheduleService.update(id, schedule), ScheduleDtoOutput.class);
+        Schedule schedule = scheduleMapper.scheduleDtoInputToSchedule(scheduleDto);
+        return scheduleMapper.scheduleToScheduleDtoOutput(scheduleService.update(id, schedule));
     }
 
     @RolesAllowed({ PermissionGroup.ADMIN, PermissionGroup.USER })
