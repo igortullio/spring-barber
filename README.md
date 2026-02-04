@@ -1,8 +1,8 @@
 # Spring Barber
 
-API REST para cadastro de barbearias e agendamento de horários, desenvolvida com Spring Boot e arquitetura de permissões baseada em grupos.
+REST API for barbershop registration and appointment scheduling, built with Spring Boot and a group-based permissions architecture.
 
-## Tecnologias
+## Tech Stack
 
 - Java 17
 - Spring Boot
@@ -11,20 +11,20 @@ API REST para cadastro de barbearias e agendamento de horários, desenvolvida co
 - PostgreSQL
 - Swagger / OpenAPI
 
-## Diagrama de tabelas
+## Database Diagram
 
 ![Spring Barber](https://user-images.githubusercontent.com/20797306/150369005-98e0fccd-4fe1-4261-9eda-c5edd3557254.png)
 
-## Funcionalidades
+## Features
 
-- Cadastro e autenticação de usuários (JWT)
-- CRUD de barbearias com endereço e geolocalização
-- Gerenciamento de horários de funcionamento por dia da semana
-- Agendamento com confirmação e cancelamento
-- Sistema de permissões por grupo
-- CRUD de estados e cidades
+- User registration and authentication (JWT)
+- Barbershop CRUD with address and geolocation
+- Business hours management by day of the week
+- Appointment booking with confirmation and cancellation
+- Group-based permissions system
+- States and cities CRUD
 
-## Como executar
+## Getting Started
 
 ```bash
 git clone https://github.com/igortullio/spring-barber
@@ -34,12 +34,12 @@ cd spring-barber
 
 ## API
 
-Documentação completa dos endpoints disponível no repositório (collections Postman/Insomnia).
+Full endpoint documentation available in the repository (Postman/Insomnia collections).
 
-### Principais recursos
+### Main Resources
 
-| Recurso | Métodos |
-|---------|---------|
+| Resource | Methods |
+|----------|---------|
 | `/auth/login` | POST |
 | `/users` | GET, POST, PUT, DELETE |
 | `/barbershops` | GET, POST, PUT, DELETE |
